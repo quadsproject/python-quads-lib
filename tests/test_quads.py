@@ -26,7 +26,7 @@ class TestQuadsApi:
         result = self.api.get_hosts()
 
         mock_get.assert_called_once()
-        assert mock_get.call_args[0][0].endswith("/hosts")
+        assert str(mock_get.call_args[0][0]).endswith("/hosts")
         assert result == expected_response
 
     @patch("requests.Session.get")
@@ -39,7 +39,7 @@ class TestQuadsApi:
         result = self.api.get_hosts()
 
         mock_get.assert_called_once()
-        assert mock_get.call_args[0][0].endswith("/hosts")
+        assert str(mock_get.call_args[0][0]).endswith("/hosts")
         assert result == expected_response
 
     @patch("requests.Session.get")
@@ -64,7 +64,7 @@ class TestQuadsApi:
         result = self.api.get_host_models()
 
         mock_get.assert_called_once()
-        assert mock_get.call_args[0][0].endswith("/hosts?group_by=model")
+        assert str(mock_get.call_args[0][0]).endswith("/hosts?group_by=model")
         assert result == expected_response
 
     @patch("requests.Session.get")
@@ -77,7 +77,7 @@ class TestQuadsApi:
         result = self.api.get_host_models()
 
         mock_get.assert_called_once()
-        assert mock_get.call_args[0][0].endswith("/hosts?group_by=model")
+        assert str(mock_get.call_args[0][0]).endswith("/hosts?group_by=model")
         assert result == expected_response
 
     @patch("requests.Session.get")
@@ -131,7 +131,7 @@ class TestQuadsApi:
         result = self.api.filter_hosts(filter_data)
 
         mock_get.assert_called_once()
-        called_url = mock_get.call_args[0][0]
+        called_url = str(mock_get.call_args[0][0])
         assert called_url.endswith(
             (
                 "/hosts?model=model1&cloud=cloud1&status=active",
@@ -151,7 +151,7 @@ class TestQuadsApi:
         result = self.api.filter_hosts({})
 
         mock_get.assert_called_once()
-        assert mock_get.call_args[0][0].endswith("/hosts?")
+        assert str(mock_get.call_args[0][0]).endswith("/hosts?")
         assert result == expected_response
 
     @patch("requests.Session.get")
@@ -166,7 +166,7 @@ class TestQuadsApi:
         result = self.api.filter_hosts(filter_data)
 
         mock_get.assert_called_once()
-        called_url = mock_get.call_args[0][0]
+        called_url = str(mock_get.call_args[0][0])
         assert "name=test+host+%26+more" in called_url
         assert "tag=special%3Dtag" in called_url
         assert result == expected_response
@@ -202,7 +202,7 @@ class TestQuadsApi:
         result = self.api.filter_clouds(filter_data)
 
         mock_get.assert_called_once()
-        called_url = mock_get.call_args[0][0]
+        called_url = str(mock_get.call_args[0][0])
         assert called_url.endswith(
             (
                 "/clouds?owner=user1&description=test+cloud&ticket=123",
@@ -222,7 +222,7 @@ class TestQuadsApi:
         result = self.api.filter_clouds({})
 
         mock_get.assert_called_once()
-        assert mock_get.call_args[0][0].endswith("/clouds?")
+        assert str(mock_get.call_args[0][0]).endswith("/clouds?")
         assert result == expected_response
 
     @patch("requests.Session.get")
@@ -237,7 +237,7 @@ class TestQuadsApi:
         result = self.api.filter_clouds(filter_data)
 
         mock_get.assert_called_once()
-        called_url = mock_get.call_args[0][0]
+        called_url = str(mock_get.call_args[0][0])
         assert "name=test+cloud+%26+more" in called_url
         assert "tag=special%3Dtag" in called_url
         assert result == expected_response
@@ -273,7 +273,7 @@ class TestQuadsApi:
         result = self.api.filter_assignments(filter_data)
 
         mock_get.assert_called_once()
-        called_url = mock_get.call_args[0][0]
+        called_url = str(mock_get.call_args[0][0])
         assert called_url.endswith(
             (
                 "/assignments?cloud=cloud1&host=host1&status=active",
@@ -293,7 +293,7 @@ class TestQuadsApi:
         result = self.api.filter_assignments({})
 
         mock_get.assert_called_once()
-        assert mock_get.call_args[0][0].endswith("/assignments?")
+        assert str(mock_get.call_args[0][0]).endswith("/assignments?")
         assert result == expected_response
 
     @patch("requests.Session.get")
@@ -308,7 +308,7 @@ class TestQuadsApi:
         result = self.api.filter_assignments(filter_data)
 
         mock_get.assert_called_once()
-        called_url = mock_get.call_args[0][0]
+        called_url = str(mock_get.call_args[0][0])
         assert "cloud=test+cloud+%26+more" in called_url
         assert "tag=special%3Dtag" in called_url
         assert result == expected_response
@@ -342,7 +342,7 @@ class TestQuadsApi:
         result = self.api.get_host("host1")
 
         mock_get.assert_called_once()
-        assert mock_get.call_args[0][0].endswith("/hosts/host1")
+        assert str(mock_get.call_args[0][0]).endswith("/hosts/host1")
         assert result == expected_response
 
     @patch("requests.Session.get")
@@ -374,7 +374,7 @@ class TestQuadsApi:
         result = self.api.get_host("host.1")
 
         mock_get.assert_called_once()
-        assert mock_get.call_args[0][0].endswith("/hosts/host.1")
+        assert str(mock_get.call_args[0][0]).endswith("/hosts/host.1")
         assert result == expected_response
 
     @patch("requests.Session.post")
@@ -387,7 +387,7 @@ class TestQuadsApi:
         result = self.api.create_host(host_data)
 
         mock_post.assert_called_once()
-        assert mock_post.call_args[0][0].endswith("/hosts")
+        assert str(mock_post.call_args[0][0]).endswith("/hosts")
         assert mock_post.call_args[1]["json"] == host_data
         assert result == mock_response
 
@@ -428,7 +428,7 @@ class TestQuadsApi:
         result = self.api.create_host(host_data)
 
         mock_post.assert_called_once()
-        assert mock_post.call_args[0][0].endswith("/hosts")
+        assert str(mock_post.call_args[0][0]).endswith("/hosts")
         assert mock_post.call_args[1]["json"] == host_data
         assert result == mock_response
 
@@ -443,7 +443,7 @@ class TestQuadsApi:
         result = self.api.update_host(hostname, update_data)
 
         mock_patch.assert_called_once()
-        assert mock_patch.call_args[0][0].endswith(f"/hosts/{hostname}")
+        assert str(mock_patch.call_args[0][0]).endswith(f"/hosts/{hostname}")
         assert mock_patch.call_args[1]["json"] == update_data
         assert result == mock_response
 
@@ -484,7 +484,7 @@ class TestQuadsApi:
         result = self.api.update_host(hostname, update_data)
 
         mock_patch.assert_called_once()
-        assert mock_patch.call_args[0][0].endswith(f"/hosts/{hostname}")
+        assert str(mock_patch.call_args[0][0]).endswith(f"/hosts/{hostname}")
         assert mock_patch.call_args[1]["json"] == update_data
         assert result == mock_response
 
@@ -498,7 +498,7 @@ class TestQuadsApi:
         result = self.api.remove_host(hostname)
 
         mock_delete.assert_called_once()
-        assert mock_delete.call_args[0][0].endswith(f"/hosts/{hostname}")
+        assert str(mock_delete.call_args[0][0]).endswith(f"/hosts/{hostname}")
         assert result == mock_response
 
     @patch("requests.Session.delete")
@@ -530,7 +530,7 @@ class TestQuadsApi:
         result = self.api.remove_host(hostname)
 
         mock_delete.assert_called_once()
-        assert mock_delete.call_args[0][0].endswith(f"/hosts/{hostname}")
+        assert str(mock_delete.call_args[0][0]).endswith(f"/hosts/{hostname}")
         assert result == mock_response
 
     @patch("requests.Session.get")
@@ -544,7 +544,7 @@ class TestQuadsApi:
         result = self.api.is_available(hostname, query_data)
 
         mock_get.assert_called_once()
-        called_url = mock_get.call_args[0][0]
+        called_url = str(mock_get.call_args[0][0])
         assert called_url.endswith(
             (
                 f"/available/{hostname}?start_date=2024-03-20&end_date=2024-03-21",
@@ -595,7 +595,7 @@ class TestQuadsApi:
         result = self.api.is_available(hostname, {})
 
         mock_get.assert_called_once()
-        assert mock_get.call_args[0][0].endswith(f"/available/{hostname}?")
+        assert str(mock_get.call_args[0][0]).endswith(f"/available/{hostname}?")
         assert result is True
 
     @patch("requests.Session.get")
@@ -610,7 +610,7 @@ class TestQuadsApi:
         result = self.api.get_clouds()
 
         mock_get.assert_called_once()
-        assert mock_get.call_args[0][0].endswith("/clouds")
+        assert str(mock_get.call_args[0][0]).endswith("/clouds")
         assert result == expected_response
 
     @patch("requests.Session.get")
@@ -623,7 +623,7 @@ class TestQuadsApi:
         result = self.api.get_clouds()
 
         mock_get.assert_called_once()
-        assert mock_get.call_args[0][0].endswith("/clouds")
+        assert str(mock_get.call_args[0][0]).endswith("/clouds")
         assert result == expected_response
 
     @patch("requests.Session.get")
@@ -657,7 +657,7 @@ class TestQuadsApi:
         result = self.api.get_free_clouds()
 
         mock_get.assert_called_once()
-        assert mock_get.call_args[0][0].endswith("/clouds/free/")
+        assert str(mock_get.call_args[0][0]).endswith("/clouds/free")
         assert result == expected_response
 
     @patch("requests.Session.get")
@@ -670,7 +670,7 @@ class TestQuadsApi:
         result = self.api.get_free_clouds()
 
         mock_get.assert_called_once()
-        assert mock_get.call_args[0][0].endswith("/clouds/free/")
+        assert str(mock_get.call_args[0][0]).endswith("/clouds/free")
         assert result == expected_response
 
     @patch("requests.Session.get")
@@ -703,7 +703,7 @@ class TestQuadsApi:
         result = self.api.get_cloud(cloud_name)
 
         mock_get.assert_called_once()
-        assert mock_get.call_args[0][0].endswith(f"/clouds?name={cloud_name}")
+        assert str(mock_get.call_args[0][0]).endswith(f"/clouds?name={cloud_name}")
         assert result == expected_response
 
     @patch("requests.Session.get")
@@ -736,7 +736,7 @@ class TestQuadsApi:
         result = self.api.get_summary(query_data)
 
         mock_get.assert_called_once()
-        called_url = mock_get.call_args[0][0]
+        called_url = str(mock_get.call_args[0][0])
         assert called_url.endswith(
             ("/clouds/summary?start_date=2024-03-20&end_date=2024-03-21", "/clouds/summary?end_date=2024-03-21&start_date=2024-03-20")
         )
@@ -752,7 +752,7 @@ class TestQuadsApi:
         result = self.api.get_summary({})
 
         mock_get.assert_called_once()
-        assert mock_get.call_args[0][0].endswith("/clouds/summary")
+        assert str(mock_get.call_args[0][0]).endswith("/clouds/summary")
         assert result == expected_response
 
     @patch("requests.Session.get")
@@ -784,7 +784,7 @@ class TestQuadsApi:
         result = self.api.insert_cloud(cloud_data)
 
         mock_post.assert_called_once()
-        assert mock_post.call_args[0][0].endswith("/clouds")
+        assert str(mock_post.call_args[0][0]).endswith("/clouds")
         assert mock_post.call_args[1]["json"] == cloud_data
         assert result == mock_response
 
@@ -798,7 +798,7 @@ class TestQuadsApi:
         result = self.api.insert_cloud(cloud_data)
 
         mock_post.assert_called_once()
-        assert mock_post.call_args[0][0].endswith("/clouds")
+        assert str(mock_post.call_args[0][0]).endswith("/clouds")
         assert mock_post.call_args[1]["json"] == cloud_data
         assert result == mock_response
 
@@ -832,7 +832,7 @@ class TestQuadsApi:
         result = self.api.update_cloud(cloud_name, update_data)
 
         mock_patch.assert_called_once()
-        assert mock_patch.call_args[0][0].endswith(f"/clouds/{cloud_name}")
+        assert str(mock_patch.call_args[0][0]).endswith(f"/clouds/{cloud_name}")
         assert mock_patch.call_args[1]["json"] == update_data
         assert result == mock_response
 
@@ -865,7 +865,7 @@ class TestQuadsApi:
         result = self.api.remove_cloud(cloud_name)
 
         mock_delete.assert_called_once()
-        assert mock_delete.call_args[0][0].endswith(f"/clouds/{cloud_name}")
+        assert str(mock_delete.call_args[0][0]).endswith(f"/clouds/{cloud_name}")
         assert result == mock_response
 
     @patch("requests.Session.delete")
@@ -902,7 +902,7 @@ class TestQuadsApi:
         result = self.api.get_schedules()
 
         mock_get.assert_called_once()
-        assert mock_get.call_args[0][0].endswith("/schedules")
+        assert str(mock_get.call_args[0][0]).endswith("/schedules")
         assert result == expected_response
 
     @patch("requests.Session.get")
@@ -916,7 +916,7 @@ class TestQuadsApi:
         result = self.api.get_schedules(query_data)
 
         mock_get.assert_called_once()
-        assert mock_get.call_args[0][0].endswith("/schedules?cloud=cloud1&start=2024-03-20") or mock_get.call_args[0][0].endswith(
+        assert str(mock_get.call_args[0][0]).endswith("/schedules?cloud=cloud1&start=2024-03-20") or str(mock_get.call_args[0][0]).endswith(
             "/schedules?start=2024-03-20&cloud=cloud1"
         )
         assert result == expected_response
@@ -931,7 +931,7 @@ class TestQuadsApi:
         result = self.api.get_current_schedules()
 
         mock_get.assert_called_once()
-        assert mock_get.call_args[0][0].endswith("/schedules/current")
+        assert str(mock_get.call_args[0][0]).endswith("/schedules/current")
         assert result == expected_response
 
     @patch("requests.Session.get")
@@ -945,7 +945,7 @@ class TestQuadsApi:
         result = self.api.get_current_schedules(query_data)
 
         mock_get.assert_called_once()
-        assert mock_get.call_args[0][0].endswith("/schedules/current?cloud=cloud1")
+        assert str(mock_get.call_args[0][0]).endswith("/schedules/current?cloud=cloud1")
         assert result == expected_response
 
     @patch("requests.Session.get")
@@ -977,7 +977,7 @@ class TestQuadsApi:
         result = self.api.get_schedule(schedule_id)
 
         mock_get.assert_called_once()
-        assert mock_get.call_args[0][0].endswith(f"/schedules/{schedule_id}")
+        assert str(mock_get.call_args[0][0]).endswith(f"/schedules/{schedule_id}")
         assert result == expected_response
 
     @patch("requests.Session.get")
@@ -995,7 +995,7 @@ class TestQuadsApi:
         result = self.api.get_future_schedules()
 
         mock_get.assert_called_once()
-        assert mock_get.call_args[0][0].endswith("/schedules/future")
+        assert str(mock_get.call_args[0][0]).endswith("/schedules/future")
         assert result == expected_response
 
     @patch("requests.Session.get")
@@ -1009,7 +1009,7 @@ class TestQuadsApi:
         result = self.api.get_future_schedules(query_data)
 
         mock_get.assert_called_once()
-        assert mock_get.call_args[0][0].endswith("/schedules/future?cloud=cloud1")
+        assert str(mock_get.call_args[0][0]).endswith("/schedules/future?cloud=cloud1")
         assert result == expected_response
 
     @patch("requests.Session.patch")
@@ -1023,7 +1023,7 @@ class TestQuadsApi:
         result = self.api.update_schedule(schedule_id, update_data)
 
         mock_patch.assert_called_once()
-        assert mock_patch.call_args[0][0].endswith(f"/schedules/{schedule_id}")
+        assert str(mock_patch.call_args[0][0]).endswith(f"/schedules/{schedule_id}")
         assert mock_patch.call_args[1]["json"] == update_data
         assert result == mock_response
 
@@ -1037,7 +1037,7 @@ class TestQuadsApi:
         result = self.api.remove_schedule(schedule_id)
 
         mock_delete.assert_called_once()
-        assert mock_delete.call_args[0][0].endswith(f"/schedules/{schedule_id}")
+        assert str(mock_delete.call_args[0][0]).endswith(f"/schedules/{schedule_id}")
         assert result == mock_response
 
     @patch("requests.Session.get")
@@ -1086,7 +1086,7 @@ class TestQuadsApi:
         result = self.api.insert_schedule(schedule_data)
 
         mock_post.assert_called_once()
-        assert mock_post.call_args[0][0].endswith("/schedules")
+        assert str(mock_post.call_args[0][0]).endswith("/schedules")
         assert mock_post.call_args[1]["json"] == schedule_data
         assert result == mock_response
 
@@ -1100,7 +1100,7 @@ class TestQuadsApi:
         result = self.api.get_available()
 
         mock_get.assert_called_once()
-        assert mock_get.call_args[0][0].endswith("/available")
+        assert str(mock_get.call_args[0][0]).endswith("/available")
         assert result == expected_response
 
     @patch("requests.Session.get")
@@ -1114,7 +1114,7 @@ class TestQuadsApi:
         result = self.api.filter_available(filter_data)
 
         mock_get.assert_called_once()
-        called_url = mock_get.call_args[0][0]
+        called_url = str(mock_get.call_args[0][0])
         assert "start_date=2024-03-20" in called_url
         assert "end_date=2024-03-21" in called_url
         assert "model=model1" in called_url
@@ -1130,7 +1130,7 @@ class TestQuadsApi:
         result = self.api.insert_assignment(assignment_data)
 
         mock_post.assert_called_once()
-        assert mock_post.call_args[0][0].endswith("/assignments")
+        assert str(mock_post.call_args[0][0]).endswith("/assignments")
         assert mock_post.call_args[1]["json"] == assignment_data
         assert result == mock_response
 
@@ -1145,7 +1145,7 @@ class TestQuadsApi:
         result = self.api.update_assignment(assignment_id, update_data)
 
         mock_patch.assert_called_once()
-        assert mock_patch.call_args[0][0].endswith(f"/assignments/{assignment_id}")
+        assert str(mock_patch.call_args[0][0]).endswith(f"/assignments/{assignment_id}")
         assert mock_patch.call_args[1]["json"] == update_data
         assert result == mock_response
 
@@ -1160,7 +1160,7 @@ class TestQuadsApi:
         result = self.api.update_notification(notification_id, update_data)
 
         mock_patch.assert_called_once()
-        assert mock_patch.call_args[0][0].endswith(f"/notifications/{notification_id}")
+        assert str(mock_patch.call_args[0][0]).endswith(f"/notifications/{notification_id}")
         assert mock_patch.call_args[1]["json"] == update_data
         assert result == mock_response
 
@@ -1220,7 +1220,7 @@ class TestQuadsApi:
         result = self.api.get_active_cloud_assignment(cloud_name)
 
         mock_get.assert_called_once()
-        assert mock_get.call_args[0][0].endswith(f"/assignments/active/{cloud_name}")
+        assert str(mock_get.call_args[0][0]).endswith(f"/assignments/active/{cloud_name}")
         assert result == expected_response
 
     @patch("requests.Session.get")
@@ -1238,7 +1238,7 @@ class TestQuadsApi:
         result = self.api.get_active_assignments()
 
         mock_get.assert_called_once()
-        assert mock_get.call_args[0][0].endswith("/assignments/active")
+        assert str(mock_get.call_args[0][0]).endswith("/assignments/active")
         assert result == expected_response
 
     @patch("requests.Session.get")
@@ -1254,7 +1254,7 @@ class TestQuadsApi:
         result = self.api.get_host_interface(hostname)
 
         mock_get.assert_called_once()
-        assert mock_get.call_args[0][0].endswith(f"/hosts/{hostname}/interfaces")
+        assert str(mock_get.call_args[0][0]).endswith(f"/hosts/{hostname}/interfaces")
         assert result == expected_response
 
     @patch("requests.Session.get")
@@ -1272,7 +1272,7 @@ class TestQuadsApi:
         result = self.api.get_interfaces()
 
         mock_get.assert_called_once()
-        assert mock_get.call_args[0][0].endswith("/interfaces")
+        assert str(mock_get.call_args[0][0]).endswith("/interfaces")
         assert result == expected_response
 
     @patch("requests.Session.patch")
@@ -1286,7 +1286,7 @@ class TestQuadsApi:
         result = self.api.update_interface(hostname, update_data)
 
         mock_patch.assert_called_once()
-        assert mock_patch.call_args[0][0].endswith(f"/interfaces/{hostname}")
+        assert str(mock_patch.call_args[0][0]).endswith(f"/interfaces/{hostname}")
         assert mock_patch.call_args[1]["json"] == update_data
         assert result == mock_response
 
@@ -1301,7 +1301,7 @@ class TestQuadsApi:
         result = self.api.remove_interface(hostname, if_name)
 
         mock_delete.assert_called_once()
-        assert mock_delete.call_args[0][0].endswith(f"/interfaces/{hostname}/{if_name}")
+        assert str(mock_delete.call_args[0][0]).endswith(f"/interfaces/{hostname}/{if_name}")
         assert result == mock_response
 
     @patch("requests.Session.post")
@@ -1315,7 +1315,7 @@ class TestQuadsApi:
         result = self.api.create_interface(hostname, interface_data)
 
         mock_post.assert_called_once()
-        assert mock_post.call_args[0][0].endswith(f"/interfaces/{hostname}")
+        assert str(mock_post.call_args[0][0]).endswith(f"/interfaces/{hostname}")
         assert mock_post.call_args[1]["json"] == interface_data
         assert result == mock_response
 
@@ -1330,7 +1330,7 @@ class TestQuadsApi:
         result = self.api.create_memory(hostname, memory_data)
 
         mock_post.assert_called_once()
-        assert mock_post.call_args[0][0].endswith(f"/memory/{hostname}")
+        assert str(mock_post.call_args[0][0]).endswith(f"/memory/{hostname}")
         assert mock_post.call_args[1]["json"] == memory_data
         assert result == mock_response
 
@@ -1380,7 +1380,7 @@ class TestQuadsApi:
         result = self.api.remove_memory(memory_id)
 
         mock_delete.assert_called_once()
-        assert mock_delete.call_args[0][0].endswith(f"/memory/{memory_id}")
+        assert str(mock_delete.call_args[0][0]).endswith(f"/memory/{memory_id}")
         assert result == mock_response
 
     @patch("requests.Session.post")
@@ -1394,7 +1394,7 @@ class TestQuadsApi:
         result = self.api.create_disk(hostname, disk_data)
 
         mock_post.assert_called_once()
-        assert mock_post.call_args[0][0].endswith(f"/disks/{hostname}")
+        assert str(mock_post.call_args[0][0]).endswith(f"/disks/{hostname}")
         assert mock_post.call_args[1]["json"] == disk_data
         assert result == mock_response
 
@@ -1409,7 +1409,7 @@ class TestQuadsApi:
         result = self.api.update_disk(hostname, disk_data)
 
         mock_patch.assert_called_once()
-        assert mock_patch.call_args[0][0].endswith(f"/disks/{hostname}")
+        assert str(mock_patch.call_args[0][0]).endswith(f"/disks/{hostname}")
         assert mock_patch.call_args[1]["json"] == disk_data
         assert result == mock_response
 
@@ -1424,7 +1424,7 @@ class TestQuadsApi:
         result = self.api.remove_disk(hostname, disk_id)
 
         mock_delete.assert_called_once()
-        assert mock_delete.call_args[0][0].endswith(f"/disks/{hostname}/{disk_id}")
+        assert str(mock_delete.call_args[0][0]).endswith(f"/disks/{hostname}/{disk_id}")
         assert result == mock_response
 
     @patch("requests.Session.post")
@@ -1438,7 +1438,7 @@ class TestQuadsApi:
         result = self.api.create_processor(hostname, processor_data)
 
         mock_post.assert_called_once()
-        assert mock_post.call_args[0][0].endswith(f"/processors/{hostname}")
+        assert str(mock_post.call_args[0][0]).endswith(f"/processors/{hostname}")
         assert mock_post.call_args[1]["json"] == processor_data
         assert result == mock_response
 
@@ -1452,7 +1452,7 @@ class TestQuadsApi:
         result = self.api.remove_processor(processor_id)
 
         mock_delete.assert_called_once()
-        assert mock_delete.call_args[0][0].endswith(f"/processors/{processor_id}")
+        assert str(mock_delete.call_args[0][0]).endswith(f"/processors/{processor_id}")
         assert result == mock_response
 
     @patch("requests.Session.get")
@@ -1470,7 +1470,7 @@ class TestQuadsApi:
         result = self.api.get_vlans()
 
         mock_get.assert_called_once()
-        assert mock_get.call_args[0][0].endswith("/vlans")
+        assert str(mock_get.call_args[0][0]).endswith("/vlans")
         assert result == expected_response
 
     @patch("requests.Session.get")
@@ -1484,7 +1484,7 @@ class TestQuadsApi:
         result = self.api.get_vlan(vlan_id)
 
         mock_get.assert_called_once()
-        assert mock_get.call_args[0][0].endswith(f"/vlans/{vlan_id}")
+        assert str(mock_get.call_args[0][0]).endswith(f"/vlans/{vlan_id}")
         assert result == expected_response
 
     @patch("requests.Session.patch")
@@ -1498,7 +1498,7 @@ class TestQuadsApi:
         result = self.api.update_vlan(vlan_id, update_data)
 
         mock_patch.assert_called_once()
-        assert mock_patch.call_args[0][0].endswith(f"/vlans/{vlan_id}")
+        assert str(mock_patch.call_args[0][0]).endswith(f"/vlans/{vlan_id}")
         assert mock_patch.call_args[1]["json"] == update_data
         assert result == mock_response
 
@@ -1512,7 +1512,7 @@ class TestQuadsApi:
         result = self.api.create_vlan(vlan_data)
 
         mock_post.assert_called_once()
-        assert mock_post.call_args[0][0].endswith("/vlans")
+        assert str(mock_post.call_args[0][0]).endswith("/vlans")
         assert mock_post.call_args[1]["json"] == vlan_data
         assert result == mock_response
 
@@ -1531,7 +1531,7 @@ class TestQuadsApi:
         result = self.api.get_moves()
 
         mock_get.assert_called_once()
-        assert mock_get.call_args[0][0].endswith("/moves")
+        assert str(mock_get.call_args[0][0]).endswith("/moves")
         assert result == expected_response
 
     @patch("requests.Session.get")
@@ -1545,7 +1545,7 @@ class TestQuadsApi:
         result = self.api.get_moves(date)
 
         mock_get.assert_called_once()
-        assert mock_get.call_args[0][0].endswith(f"/moves?date={date}")
+        assert str(mock_get.call_args[0][0]).endswith(f"/moves?date={date}")
         assert result == expected_response
 
     @patch("requests.Session.get")
@@ -1558,7 +1558,7 @@ class TestQuadsApi:
         result = self.api.get_version()
 
         mock_get.assert_called_once()
-        assert mock_get.call_args[0][0].endswith("/version")
+        assert str(mock_get.call_args[0][0]).endswith("/version")
         assert result == expected_response
 
     @patch("requests.Session.delete")
