@@ -84,3 +84,5 @@ jobs:
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         files: coverage.xml
+        slug: quadsproject/python-quads-lib
+        
