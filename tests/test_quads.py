@@ -14,7 +14,7 @@ class TestQuadsApi:
     def setup(self):
         self.username = "testuser"
         self.password = "testpassword"
-        self.base_url = "http://example.com"
+        self.base_url = "http://example.com/"
         self.api = QuadsApi(self.username, self.password, self.base_url)
 
     @patch("requests.Session.get")

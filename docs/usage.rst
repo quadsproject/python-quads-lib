@@ -6,6 +6,6 @@ To use the project:
 
 .. code-block:: python
 
-    from quads_lib import QuadsApi
-    quads = QuadsApi()
+    from quads_lib.quads import QuadsApi
+    quads = QuadsApi(username, password, base_url)
     hosts = quads.get_hosts()
