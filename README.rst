@@ -21,9 +21,9 @@ Overview
     :alt: GitHub Actions Build Status
     :target: https://github.com/quadsproject/python-quads-lib/actions
 
-.. |codecov| image:: https://codecov.io/gh/quadsproject/python-quads-lib/branch/main/graphs/badge.svg?branch=main
+.. |codecov| image:: https://codecov.io/github/quadsproject/python-quads-lib/graph/badge.svg?token=E8NVWU7P67
     :alt: Coverage Status
-    :target: https://app.codecov.io/github/quadsproject/python-quads-lib
+    :target: https://codecov.io/github/quadsproject/python-quads-lib
 
 .. |version| image:: https://img.shields.io/pypi/v/quads-lib.svg
     :alt: PyPI Package latest release
