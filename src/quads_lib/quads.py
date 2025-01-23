@@ -24,13 +24,14 @@ class QuadsBase:
     Base class for the Quads API
     """
 
-    def __init__(self, config):
-        self.config = config
-        self.base_url = config.API_URL
+    def __init__(self, username: str, password: str, base_url: str):
+        self.username = username
+        self.password = password
+        self.base_url = base_url
         self.session = Session()
         retries = Retry(total=5, backoff_factor=1, status_forcelist=[502, 503, 504])
         self.session.mount("http://", HTTPAdapter(max_retries=retries))
-        self.auth = HTTPBasicAuth(self.config.get("quads_api_username"), self.config.get("quads_api_password"))
+        self.auth = HTTPBasicAuth(self.username, self.password)
 
     # Base functions
     def get(self, endpoint: str) -> dict:
