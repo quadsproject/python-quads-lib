@@ -79,6 +79,5 @@ Note, to combine the coverage data from all the tox environments run:
     :widths: 10 90
     :stub-columns: 1
 
-    - ::
-
-          PYTEST_ADDOPTS=--cov-append tox
+    * - Command
+      - ``PYTEST_ADDOPTS=--cov-append tox``
