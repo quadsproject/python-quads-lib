@@ -19,18 +19,6 @@ jobs:
             toxpython: 'python3.11'
             tox_env: 'docs'
             os: 'ubuntu-latest'
-          - name: 'py39 (ubuntu)'
-            python: '3.9'
-            toxpython: 'python3.9'
-            python_arch: 'x64'
-            tox_env: 'py39'
-            os: 'ubuntu-latest'
-          - name: 'py39 (macos)'
-            python: '3.9'
-            toxpython: 'python3.9'
-            python_arch: 'arm64'
-            tox_env: 'py39'
-            os: 'macos-latest'
           - name: 'py310 (ubuntu)'
             python: '3.10'
             toxpython: 'python3.10'
@@ -66,18 +54,6 @@ jobs:
             toxpython: 'python3.12'
             python_arch: 'arm64'
             tox_env: 'py312'
-            os: 'macos-latest'
-          - name: 'pypy39 (ubuntu)'
-            python: 'pypy-3.9'
-            toxpython: 'pypy3.9'
-            python_arch: 'x64'
-            tox_env: 'pypy39'
-            os: 'ubuntu-latest'
-          - name: 'pypy39 (macos)'
-            python: 'pypy-3.9'
-            toxpython: 'pypy3.9'
-            python_arch: 'arm64'
-            tox_env: 'pypy39'
             os: 'macos-latest'
           - name: 'pypy310 (ubuntu)'
             python: 'pypy-3.10'
@@ -116,7 +92,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: coverage-data
-        path: .coverage
+        path: coverage.xml
         retention-days: 1
   finish:
     needs: test
@@ -127,8 +103,8 @@ jobs:
     - uses: actions/download-artifact@v4
       with:
         name: coverage-data
-        path: .coverage
+        path: coverage.xml
     - uses: codecov/codecov-action@v3
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
-        files: .coverage
+        files: coverage.xml
