@@ -2,7 +2,7 @@ from json import JSONDecodeError
 from pathlib import Path
 from typing import Optional
 from urllib import parse as url_parse
-from urllib.parse import urlencode
+from urllib.parse import urlencode, urljoin
 
 from requests import Response
 from requests import Session
@@ -35,7 +35,7 @@ class QuadsBase:
 
     # Base functions
     def get(self, endpoint: str) -> dict:
-        _response = self.session.get(Path(self.base_url) / endpoint, verify=False, auth=self.auth)
+        _response = self.session.get(urljoin(self.base_url, endpoint), verify=False, auth=self.auth)
         if _response.status_code == 500:
             raise APIServerException("Check the flask server logs")
         if _response.status_code == 400:
@@ -48,7 +48,7 @@ class QuadsBase:
 
     def post(self, endpoint, data) -> Response:
         _response = self.session.post(
-            Path(self.base_url) / endpoint,
+            urljoin(self.base_url, endpoint),
             json=data,
             verify=False,
             auth=self.auth,
@@ -62,7 +62,7 @@ class QuadsBase:
 
     def patch(self, endpoint, data) -> Response:
         _response = self.session.patch(
-            Path(self.base_url) / endpoint,
+            urljoin(self.base_url, endpoint),
             json=data,
             verify=False,
             auth=self.auth,
@@ -75,7 +75,7 @@ class QuadsBase:
         return _response
 
     def delete(self, endpoint) -> Response:
-        _response = self.session.delete(Path(self.base_url) / endpoint, verify=False, auth=self.auth)
+        _response = self.session.delete(urljoin(self.base_url, endpoint), verify=False, auth=self.auth)
         if _response.status_code == 500:
             raise APIServerException("Check the flask server logs")
         if _response.status_code == 400:
@@ -114,7 +114,8 @@ class QuadsApi(QuadsBase):
         return json_response
 
     def get_host(self, hostname: str) -> dict:
-        json_response = self.get(Path("hosts") / hostname)
+        endpoint = Path("hosts") / hostname
+        json_response = self.get(str(endpoint))
         return json_response
 
     def create_host(self, data: dict) -> Response:
@@ -122,15 +123,19 @@ class QuadsApi(QuadsBase):
         return response
 
     def update_host(self, hostname: str, data: dict) -> Response:
-        return self.patch(Path("hosts") / hostname, data)
+        endpoint = Path("hosts") / hostname
+        response = self.patch(str(endpoint), data)
+        return response
 
     def remove_host(self, hostname: str) -> Response:
-        return self.delete(Path("hosts") / hostname)
+        endpoint = Path("hosts") / hostname
+        response = self.delete(str(endpoint))
+        return response
 
     def is_available(self, hostname: str, data: dict) -> bool:
         url_params = url_parse.urlencode(data)
-        uri = Path("available") / hostname
-        json_response = self.get(f"{uri}?{url_params}")
+        endpoint = Path("available") / hostname
+        json_response = self.get(f"{endpoint}?{url_params}")
         return True if "true" in json_response else False
 
     # Clouds
@@ -159,10 +164,14 @@ class QuadsApi(QuadsBase):
         return self.post("clouds", data)
 
     def update_cloud(self, cloud_name: str, data: dict) -> Response:
-        return self.patch(Path("clouds") / cloud_name, data)
+        endpoint = Path("clouds") / cloud_name
+        response = self.patch(str(endpoint), data)
+        return response
 
     def remove_cloud(self, cloud_name: str) -> Response:
-        return self.delete(Path("clouds") / cloud_name)
+        endpoint = Path("clouds") / cloud_name
+        response = self.delete(str(endpoint))
+        return response
 
     # Schedules
     def get_schedules(self, data: Optional[dict] = None) -> dict:
@@ -187,8 +196,8 @@ class QuadsApi(QuadsBase):
         return json_response
 
     def get_schedule(self, schedule_id: int) -> dict:
-        url = Path("schedules") / str(schedule_id)
-        json_response = self.get(url)
+        endpoint = Path("schedules") / str(schedule_id)
+        json_response = self.get(str(endpoint))
         return json_response
 
     def get_future_schedules(self, data: Optional[dict] = None) -> dict:
@@ -203,10 +212,14 @@ class QuadsApi(QuadsBase):
         return json_response
 
     def update_schedule(self, schedule_id: int, data: dict) -> Response:
-        return self.patch(Path("schedules") / str(schedule_id), data)
+        endpoint = Path("schedules") / str(schedule_id)
+        response = self.patch(str(endpoint), data)
+        return response
 
     def remove_schedule(self, schedule_id: int) -> Response:
-        return self.delete(Path("schedules") / str(schedule_id))
+        endpoint = Path("schedules") / str(schedule_id)
+        response = self.delete(str(endpoint))
+        return response
 
     def insert_schedule(self, data: dict) -> Response:
         return self.post("schedules", data)
@@ -225,13 +238,18 @@ class QuadsApi(QuadsBase):
         return self.post("assignments", data)
 
     def update_assignment(self, assignment_id: int, data: dict) -> Response:
-        return self.patch(Path("assignments") / str(assignment_id), data)
+        endpoint = Path("assignments") / str(assignment_id)
+        response = self.patch(str(endpoint), data)
+        return response
 
     def update_notification(self, notification_id: int, data: dict) -> Response:
-        return self.patch(Path("notifications") / str(notification_id), data)
+        endpoint = Path("notifications") / str(notification_id)
+        response = self.patch(str(endpoint), data)
+        return response
 
     def get_active_cloud_assignment(self, cloud_name: str) -> dict:
-        json_response = self.get(Path("assignments") / "active" / cloud_name)
+        endpoint = Path("assignments") / "active" / cloud_name
+        json_response = self.get(str(endpoint))
         return json_response
 
     def get_active_assignments(self) -> dict:
@@ -240,7 +258,8 @@ class QuadsApi(QuadsBase):
 
     # Interfaces
     def get_host_interface(self, hostname: str) -> dict:
-        json_response = self.get(Path("hosts") / hostname / "interfaces")
+        endpoint = Path("hosts") / hostname / "interfaces"
+        json_response = self.get(str(endpoint))
         return json_response
 
     def get_interfaces(self) -> dict:
@@ -248,37 +267,58 @@ class QuadsApi(QuadsBase):
         return json_response
 
     def update_interface(self, hostname: str, data: dict) -> Response:
-        return self.patch(Path("interfaces") / hostname, data)
+        endpoint = Path("interfaces") / hostname
+        response = self.patch(str(endpoint), data)
+        return response
 
     def remove_interface(self, hostname: str, if_name: str) -> Response:
-        return self.delete(Path("interfaces") / hostname / if_name)
+        endpoint = Path("interfaces") / hostname / if_name
+        response = self.delete(str(endpoint))
+        return response
 
     def create_interface(self, hostname: str, data: dict) -> Response:
-        return self.post(Path("interfaces") / hostname, data)
+        endpoint = Path("interfaces") / hostname
+        response = self.post(str(endpoint), data)
+        return response
 
     # Memory
     def create_memory(self, hostname: str, data: dict) -> Response:
-        return self.post(Path("memory") / hostname, data)
+        endpoint = Path("memory") / hostname
+        response = self.post(str(endpoint), data)
+        return response
+
 
     def remove_memory(self, memory_id: int) -> Response:
-        return self.delete(Path("memory") / memory_id)
+        endpoint = Path("memory") / memory_id
+        response = self.delete(str(endpoint))
+        return response
 
     # Disks
     def create_disk(self, hostname: str, data: dict) -> Response:
-        return self.post(Path("disks") / hostname, data)
+        endpoint = Path("disks") / hostname
+        response = self.post(str(endpoint), data)
+        return response
 
     def update_disk(self, hostname: str, data: dict) -> Response:
-        return self.patch(Path("disks") / hostname, data)
+        endpoint = Path("disks") / hostname
+        response = self.patch(str(endpoint), data)
+        return response
 
     def remove_disk(self, hostname: str, disk_id: int) -> Response:
-        return self.delete(Path("disks") / hostname / disk_id)
+        endpoint = Path("disks") / hostname / disk_id
+        response = self.delete(str(endpoint))
+        return response
 
     # Processor
     def create_processor(self, hostname: str, data: dict) -> Response:
-        return self.post(Path("processors") / hostname, data)
+        endpoint = Path("processors") / hostname
+        response = self.post(str(endpoint), data)
+        return response
 
     def remove_processor(self, processor_id: int) -> Response:
-        return self.delete(Path("processors") / processor_id)
+        endpoint = Path("processors") / processor_id
+        response = self.delete(str(endpoint))
+        return response
 
     # Vlans
     def get_vlans(self) -> dict:
@@ -286,11 +326,14 @@ class QuadsApi(QuadsBase):
         return json_response
 
     def get_vlan(self, vlan_id: int) -> dict:
-        json_response = self.get(Path("vlans") / str(vlan_id))
+        endpoint = Path("vlans") / str(vlan_id)
+        json_response = self.get(str(endpoint))
         return json_response
 
     def update_vlan(self, vlan_id: int, data: dict) -> Response:
-        return self.patch(Path("vlans") / str(vlan_id), data)
+        endpoint = Path("vlans") / str(vlan_id)
+        response = self.patch(str(endpoint), data)
+        return response
 
     def create_vlan(self, data: dict) -> Response:
         return self.post("vlans", data)

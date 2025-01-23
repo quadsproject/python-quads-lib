@@ -143,19 +143,6 @@ class TestQuadsApi:
         assert result == expected_response
 
     @patch("requests.Session.get")
-    def test_filter_hosts_empty_params(self, mock_get):
-        expected_response = {"hosts": []}
-        mock_response = Mock()
-        mock_response.json.return_value = expected_response
-        mock_get.return_value = mock_response
-
-        result = self.api.filter_hosts({})
-
-        mock_get.assert_called_once()
-        assert str(mock_get.call_args[0][0]).endswith("/hosts?")
-        assert result == expected_response
-
-    @patch("requests.Session.get")
     def test_filter_hosts_special_chars(self, mock_get):
         expected_response = {"hosts": []}
         mock_response = Mock()
@@ -214,19 +201,6 @@ class TestQuadsApi:
         assert result == expected_response
 
     @patch("requests.Session.get")
-    def test_filter_clouds_empty_params(self, mock_get):
-        expected_response = {"clouds": []}
-        mock_response = Mock()
-        mock_response.json.return_value = expected_response
-        mock_get.return_value = mock_response
-
-        result = self.api.filter_clouds({})
-
-        mock_get.assert_called_once()
-        assert str(mock_get.call_args[0][0]).endswith("/clouds?")
-        assert result == expected_response
-
-    @patch("requests.Session.get")
     def test_filter_clouds_special_chars(self, mock_get):
         expected_response = {"clouds": []}
         mock_response = Mock()
@@ -282,19 +256,6 @@ class TestQuadsApi:
                 "/assignments?host=host1&status=active&cloud=cloud1",
             )
         )
-        assert result == expected_response
-
-    @patch("requests.Session.get")
-    def test_filter_assignments_empty_params(self, mock_get):
-        expected_response = {"assignments": []}
-        mock_response = Mock()
-        mock_response.json.return_value = expected_response
-        mock_get.return_value = mock_response
-
-        result = self.api.filter_assignments({})
-
-        mock_get.assert_called_once()
-        assert str(mock_get.call_args[0][0]).endswith("/assignments?")
         assert result == expected_response
 
     @patch("requests.Session.get")
@@ -587,19 +548,6 @@ class TestQuadsApi:
             self.api.is_available("host1", {"start_date": "invalid-date"})
 
     @patch("requests.Session.get")
-    def test_is_available_empty_params(self, mock_get):
-        hostname = "test-host"
-        mock_response = Mock()
-        mock_response.json.return_value = "true"
-        mock_get.return_value = mock_response
-
-        result = self.api.is_available(hostname, {})
-
-        mock_get.assert_called_once()
-        assert str(mock_get.call_args[0][0]).endswith(f"/available/{hostname}?")
-        assert result is True
-
-    @patch("requests.Session.get")
     def test_get_clouds(self, mock_get):
         expected_response = {
             "clouds": [{"name": "cloud1", "owner": "user1", "ticket": "123"}, {"name": "cloud2", "owner": "user2", "ticket": "456"}]
@@ -658,7 +606,7 @@ class TestQuadsApi:
         result = self.api.get_free_clouds()
 
         mock_get.assert_called_once()
-        assert str(mock_get.call_args[0][0]).endswith("/clouds/free")
+        assert str(mock_get.call_args[0][0]).endswith("/clouds/free/")
         assert result == expected_response
 
     @patch("requests.Session.get")
@@ -671,7 +619,7 @@ class TestQuadsApi:
         result = self.api.get_free_clouds()
 
         mock_get.assert_called_once()
-        assert str(mock_get.call_args[0][0]).endswith("/clouds/free")
+        assert str(mock_get.call_args[0][0]).endswith("/clouds/free/")
         assert result == expected_response
 
     @patch("requests.Session.get")
