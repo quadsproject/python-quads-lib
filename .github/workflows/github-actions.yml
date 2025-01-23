@@ -80,9 +80,8 @@ jobs:
       with:
         pattern: coverage-data-*
         merge-multiple: true
-    - uses: codecov/codecov-action@v3
+    - uses: codecov/codecov-action@v5
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         files: coverage.xml
         slug: quadsproject/python-quads-lib
-        
