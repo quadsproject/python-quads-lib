@@ -12,7 +12,7 @@ Overview
     * - tests
       - |github-actions| |codecov|
     * - package
-      - |version| |wheel| |supported-versions| |supported-implementations| |commits-since|
+      - |version| |wheel| |supported-versions| |supported-implementations|
 .. |docs| image:: https://readthedocs.org/projects/python-quads-lib/badge/?style=flat
     :target: https://readthedocs.org/projects/python-quads-lib/
     :alt: Documentation Status
@@ -79,13 +79,6 @@ Note, to combine the coverage data from all the tox environments run:
     :widths: 10 90
     :stub-columns: 1
 
-    - - Windows
-      - ::
+    - ::
 
-            set PYTEST_ADDOPTS=--cov-append
-            tox
-
-    - - Other
-      - ::
-
-            PYTEST_ADDOPTS=--cov-append tox
+          PYTEST_ADDOPTS=--cov-append tox
