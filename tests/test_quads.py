@@ -12,9 +12,10 @@ from quads_lib.quads import QuadsApi
 class TestQuadsApi:
     @pytest.fixture(autouse=True)
     def setup(self):
-        self.mock_config = Mock()
-        self.mock_config.API_URL = "http://example.com"
-        self.api = QuadsApi(self.mock_config)
+        self.username = "testuser"
+        self.password = "testpassword"
+        self.base_url = "http://example.com"
+        self.api = QuadsApi(self.username, self.password, self.base_url)
 
     @patch("requests.Session.get")
     def test_get_hosts(self, mock_get):
