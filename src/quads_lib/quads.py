@@ -2,7 +2,8 @@ from json import JSONDecodeError
 from pathlib import Path
 from typing import Optional
 from urllib import parse as url_parse
-from urllib.parse import urlencode, urljoin
+from urllib.parse import urlencode
+from urllib.parse import urljoin
 
 from requests import Response
 from requests import Session
@@ -286,7 +287,6 @@ class QuadsApi(QuadsBase):
         endpoint = Path("memory") / hostname
         response = self.post(str(endpoint), data)
         return response
-
 
     def remove_memory(self, memory_id: int) -> Response:
         endpoint = Path("memory") / memory_id
