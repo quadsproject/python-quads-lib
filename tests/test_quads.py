@@ -1636,7 +1636,6 @@ class TestQuadsApi:
         mock_post.assert_called_once()
         assert str(mock_post.call_args[0][1]).endswith("/login")
         assert self.api.token == "fake-token-123"
-        assert mock_post.headers.update.called_with({"Authorization": "Bearer fake-token-123"})
         assert response == expected_response
 
     @patch("requests.Session.request")
