@@ -21,6 +21,7 @@ ignore = [
     "S607", # flake8-bandit start-process-with-partial-path
     "E501", # pycodestyle line-too-long
     "S105", # Possible hardcoded password
+    "S106", # Hardcoded password
 ]
 select = [
     "B", # flake8-bugbear
