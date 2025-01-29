@@ -1695,7 +1695,7 @@ class TestQuadsBase:
     def test_context_manager_exit(self, quads_base):
         quads_base.logout = Mock()
         quads_base.session = Mock()
-        quads_base.__exit__()
+        quads_base.__exit__(None, None, None)
 
         quads_base.logout.assert_called_once()
         quads_base.session.close.assert_called_once()
