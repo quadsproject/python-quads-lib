@@ -5,10 +5,10 @@ from unittest.mock import patch
 
 import pytest
 
-from quads_lib.quads import APIBadRequest
-from quads_lib.quads import APIServerException
+from quads_lib.base import QuadsBase
+from quads_lib.exceptions import APIBadRequest
+from quads_lib.exceptions import APIServerException
 from quads_lib.quads import QuadsApi
-from quads_lib.quads import QuadsBase
 
 
 class TestQuadsApi:

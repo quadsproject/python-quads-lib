@@ -10,9 +10,9 @@ Overview
     * - docs
       - |docs|
     * - tests
-      - |github-actions| |codecov|
+      - |github-actions||codecov|
     * - package
-      - |version| |wheel| |supported-versions| |supported-implementations|
+      - |version||wheel||supported-versions||supported-implementations|
 .. |docs| image:: https://readthedocs.org/projects/python-quads-lib/badge/?style=flat
     :target: https://readthedocs.org/projects/python-quads-lib/
     :alt: Documentation Status
