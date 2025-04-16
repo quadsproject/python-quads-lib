@@ -8,6 +8,7 @@ include .cookiecutterrc
 include .coveragerc
 include .editorconfig
 include .github/workflows/github-actions.yml
+include .gitreview
 include .pre-commit-config.yaml
 include .readthedocs.yml
 include pytest.ini
