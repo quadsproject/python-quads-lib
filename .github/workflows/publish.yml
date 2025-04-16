@@ -23,6 +23,11 @@ jobs:
         python -m pip install --upgrade pip
         pip install setuptools wheel twine bump2version
 
+    - name: Configure Git
+      run: |
+        git config --global user.email "grafuls@gmail.com"
+        git config --global user.name "Your Name"
+
     - name: Bump version
       run: bump2version minor  # patch, minor, major
 
@@ -34,3 +39,21 @@ jobs:
         TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
         TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
       run: twine upload dist/*
+
+    - name: Push changes to latest
+      uses: ad-m/github-push-action@v0.6.0
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: latest
+
+    - name: Check out development branch
+      run: |
+        git fetch origin
+        git checkout development
+        git merge latest
+
+    - name: Push changes to development
+      uses: ad-m/github-push-action@v0.6.0
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: development
