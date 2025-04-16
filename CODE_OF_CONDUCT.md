@@ -14,4 +14,3 @@ We have a simple code of conduct derived from [George Carlin's](https://en.wikip
 #### Don't be Bogus.
 * Act in a courteous manner towards everyone.
 * Don't totally ravage Oshman’s Sporting Goods.
-
