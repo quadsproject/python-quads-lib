@@ -40,17 +40,22 @@ jobs:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         branch: latest
 
-    - name: Check out development branch
-      run: |
-        git fetch origin
-        git checkout development
-        git merge latest
-
-    - name: Push changes to development
-      uses: ad-m/github-push-action@v0.6.0
+    - name: Create pull request to development
+      id: create_pr
+      uses: peter-evans/create-pull-request@v3
       with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        branch: development
+        token: ${{ secrets.GITHUB_TOKEN }}
+        base: development
+        branch: latest
+        title: 'Sync latest with development'
+        body: 'This PR syncs the latest branch with development to keep versioning in parity.'
+
+    - name: Enable auto-merge
+      uses: peter-evans/enable-pull-request-automerge@v2
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        pull-request-number: ${{ steps.create_pr.outputs.pull-request-number }}
+        merge-method: squash # or 'merge' or 'rebase'
 
     - name: Publish package
       env:
