@@ -1687,7 +1687,7 @@ class TestQuadsApi:
             "cloud": {"name": "cloud1", "owner": "user1"},
             "host": "host1",
             "start": "2025-06-20",
-            "end": "2025-06-21"
+            "end": "2025-06-21",
         }
 
         mock_response = Mock()
@@ -1704,12 +1704,7 @@ class TestQuadsApi:
     def test_create_assignment_no_logging(self, mock_request, mock_print):
         assignment_data = {"cloud": "cloud1", "host": "host1", "start": "2025-06-20", "end": "2025-06-21"}
         # Missing 'id' field in response - should not trigger logging
-        response_data = {
-            "cloud": {"name": "cloud1", "owner": "user1"},
-            "host": "host1",
-            "start": "2025-06-20",
-            "end": "2025-06-21"
-        }
+        response_data = {"cloud": {"name": "cloud1", "owner": "user1"}, "host": "host1", "start": "2025-06-20", "end": "2025-06-21"}
 
         mock_response = Mock()
         mock_response.status_code = 200
@@ -1725,11 +1720,7 @@ class TestQuadsApi:
     def test_create_assignment_limit_reached(self, mock_request, mock_print):
         assignment_data = {"cloud": "cloud1", "host": "host1", "start": "2025-06-20", "end": "2025-06-21"}
         # Error response for scheduling limit reached
-        error_response = {
-            'error': 'Forbidden',
-            'message': 'Self scheduling limit reached',
-            'status_code': 403
-        }
+        error_response = {"error": "Forbidden", "message": "Self scheduling limit reached", "status_code": 403}
 
         mock_response = Mock()
         mock_response.status_code = 403
@@ -1745,12 +1736,7 @@ class TestQuadsApi:
     @patch("requests.Session.request")
     def test_create_self_assignment_logging(self, mock_request, mock_print):
         assignment_data = {"cloud": "cloud1", "start": "2025-06-20", "end": "2025-06-21"}
-        response_data = {
-            "id": 123,
-            "cloud": {"name": "cloud1", "owner": "user1"},
-            "start": "2025-06-20",
-            "end": "2025-06-21"
-        }
+        response_data = {"id": 123, "cloud": {"name": "cloud1", "owner": "user1"}, "start": "2025-06-20", "end": "2025-06-21"}
 
         mock_response = Mock()
         mock_response.status_code = 200
@@ -1766,11 +1752,7 @@ class TestQuadsApi:
     def test_create_self_assignment_no_logging(self, mock_request, mock_print):
         assignment_data = {"cloud": "cloud1", "start": "2025-06-20", "end": "2025-06-21"}
         # Missing 'cloud' field in response - should not trigger logging
-        response_data = {
-            "id": 123,
-            "start": "2025-06-20",
-            "end": "2025-06-21"
-        }
+        response_data = {"id": 123, "start": "2025-06-20", "end": "2025-06-21"}
 
         mock_response = Mock()
         mock_response.status_code = 200
@@ -1786,11 +1768,7 @@ class TestQuadsApi:
     def test_create_self_assignment_limit_reached(self, mock_request, mock_print):
         assignment_data = {"cloud": "cloud1", "start": "2025-06-20", "end": "2025-06-21"}
         # Error response for self scheduling limit reached
-        error_response = {
-            'error': 'Forbidden',
-            'message': 'Self scheduling limit reached',
-            'status_code': 403
-        }
+        error_response = {"error": "Forbidden", "message": "Self scheduling limit reached", "status_code": 403}
 
         mock_response = Mock()
         mock_response.status_code = 403
@@ -1801,6 +1779,7 @@ class TestQuadsApi:
 
         mock_print.assert_not_called()
         assert result == error_response
+
 
 class TestQuadsBase:
     @pytest.fixture
