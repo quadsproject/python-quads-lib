@@ -41,7 +41,7 @@ jobs:
           echo "Tag already exists. Skipping version bump."
         else
           bump2version patch
-        fi  
+        fi
 
     - name: Build package
       run: python setup.py sdist bdist_wheel
