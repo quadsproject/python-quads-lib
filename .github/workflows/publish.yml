@@ -36,7 +36,12 @@ jobs:
         git config --global user.name "Your Name"
 
     - name: Bump version
-      run: bump2version patch # patch, minor, major
+      run: |
+        if git rev-parse "v$(bump2version --dry-run --list patch | grep new_version | sed -r s,"^.*=",,)" >/dev/null 2>&1; then
+          echo "Tag already exists. Skipping version bump."
+        else
+          bump2version patch
+        fi  
 
     - name: Build package
       run: python setup.py sdist bdist_wheel
