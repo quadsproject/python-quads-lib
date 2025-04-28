@@ -32,6 +32,9 @@ jobs:
         git config --global user.email "grafuls@gmail.com"
         git config --global user.name "Your Name"
 
+    - name: Pull latest
+      run: git pull origin latest
+
     - name: Bump version
       run: bump2version patch # patch, minor, major
 
