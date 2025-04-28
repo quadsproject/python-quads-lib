@@ -1,4 +1,4 @@
-__version__ = "0.1.293"
+__version__ = "0.1.294"
 
 from .quads import QuadsApi
 
