@@ -15,7 +15,7 @@ project = "quads-lib"
 year = "2025"
 author = "Gonzalo Rafuls"
 copyright = f"{year}, {author}"
-version = release = "0.1.343"
+version = release = "0.1.344"
 
 pygments_style = "trac"
 templates_path = ["."]
