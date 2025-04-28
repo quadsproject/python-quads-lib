@@ -13,7 +13,7 @@ def read(*names, **kwargs):
 
 setup(
     name="quads-lib",
-    version="0.1.87",
+    version="0.1.88",
     license="LGPL-3.0-only",
     description="Python client library for interacting with the QUADS API",
     long_description="{}\n{}".format(
