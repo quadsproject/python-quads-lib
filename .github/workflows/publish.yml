@@ -41,29 +41,14 @@ jobs:
     - name: Build package
       run: python setup.py sdist bdist_wheel
 
-    - name: Push changes to latest
-      if: ${{ !contains(github.event.head_commit.message, '[skip ci]') }}
-      uses: ad-m/github-push-action@v0.6.0
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        branch: latest
-
-    - name: Create pull request to development
-      id: create_pr
-      uses: peter-evans/create-pull-request@v3
-      with:
-        token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-        base: development
-        branch: latest
-        title: 'Sync latest with development'
-        body: 'This PR syncs the latest branch with development to keep versioning in parity.'
-
-    - name: Enable auto-merge
-      uses: peter-evans/enable-pull-request-automerge@v2
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        pull-request-number: ${{ steps.create_pr.outputs.pull-request-number }}
-        merge-method: squash # or 'merge' or 'rebase'
+    - name: Sync changes with all branches
+      run: |
+        git checkout latest
+        git pull origin latest --rebase
+        git push origin latest
+        git checkout development
+        git merge latest
+        git push origin development
 
     - name: Publish package
       env:
