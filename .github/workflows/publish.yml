@@ -7,6 +7,7 @@ on:
 
 jobs:
   publish:
+    if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
 
     permissions:
@@ -31,9 +32,6 @@ jobs:
       run: |
         git config --global user.email "grafuls@gmail.com"
         git config --global user.name "Your Name"
-
-    - name: Pull latest
-      run: git pull origin latest
 
     - name: Bump version
       run: bump2version patch # patch, minor, major
