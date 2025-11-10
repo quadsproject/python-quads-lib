@@ -4,7 +4,7 @@ requires = [
 ]
 
 [tool.ruff]
-extend-exclude = ["static", "ci/templates"]
+extend-exclude = ["static", "ci"]
 line-length = 140
 src = ["src", "tests"]
 target-version = "py39"
