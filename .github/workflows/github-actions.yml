@@ -37,11 +37,11 @@ jobs:
             python_arch: 'x64'
             tox_env: 'py312'
             os: 'ubuntu-latest'
-          - name: 'pypy312'
-            python: 'pypy-3.12'
-            toxpython: 'pypy3.12'
+          - name: 'pypy311'
+            python: 'pypy-3.11'
+            toxpython: 'pypy3.11'
             python_arch: 'x64'
-            tox_env: 'pypy312'
+            tox_env: 'pypy311'
             os: 'ubuntu-latest'
     steps:
     - uses: actions/checkout@v4
