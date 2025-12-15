@@ -20,7 +20,7 @@ class QuadsApi(QuadsBase):
 
     def login(self) -> dict:
         endpoint = urljoin(self.base_url, "login")
-        _response = self.session.post(endpoint, auth=self.auth, verify=False)
+        _response = self.session.post(endpoint, auth=self.auth, verify=self.verify)
         json_response = _response.json()
         if json_response.get("status_code") == 201:
             self.token = json_response.get("auth_token")

@@ -1782,9 +1782,15 @@ class TestQuadsApi:
 
 
 class TestQuadsBase:
+    @pytest.fixture(autouse=True)
+    def setup(self):
+        self.username = "test_user"
+        self.password = "test_pass"
+        self.base_url = "http://test.com"
+
     @pytest.fixture
     def quads_base(self):
-        return QuadsBase(username="test_user", password="test_pass", base_url="http://test.com")
+        return QuadsBase(username=self.username, password=self.password, base_url=self.base_url)
 
     def test_context_manager_enter(self, quads_base):
         quads_base.login = Mock()
@@ -1800,3 +1806,92 @@ class TestQuadsBase:
 
         quads_base.logout.assert_called_once()
         quads_base.session.close.assert_called_once()
+
+    @patch("requests.Session.request")
+    def test_verify_default_false(self, mock_request):
+        """Test that verify defaults to False for backward compatibility."""
+        api = QuadsApi(self.username, self.password, self.base_url)
+        expected_response = {"hosts": []}
+        mock_response = Mock()
+        mock_response.json.return_value = expected_response
+        mock_request.return_value = mock_response
+
+        api.get_hosts()
+
+        mock_request.assert_called_once()
+        # Check that verify=False is passed
+        assert mock_request.call_args[1]["verify"] is False
+
+    def test_verify_default_false_login(self):
+        """Test that verify defaults to False in login method."""
+        api = QuadsApi(self.username, self.password, self.base_url)
+        expected_response = {"status_code": 201, "auth_token": "token"}
+        mock_response = Mock()
+        mock_response.json.return_value = expected_response
+        api.session.post = Mock(return_value=mock_response)
+
+        api.login()
+
+        api.session.post.assert_called_once()
+        # Check that verify=False is passed
+        assert api.session.post.call_args[1]["verify"] is False
+
+    @patch("requests.Session.request")
+    def test_verify_true(self, mock_request):
+        """Test that verify=True is passed correctly."""
+        api = QuadsApi(self.username, self.password, self.base_url, verify=True)
+        expected_response = {"hosts": []}
+        mock_response = Mock()
+        mock_response.json.return_value = expected_response
+        mock_request.return_value = mock_response
+
+        api.get_hosts()
+
+        mock_request.assert_called_once()
+        # Check that verify=True is passed
+        assert mock_request.call_args[1]["verify"] is True
+
+    def test_verify_true_login(self):
+        """Test that verify=True is passed correctly in login method."""
+        api = QuadsApi(self.username, self.password, self.base_url, verify=True)
+        expected_response = {"status_code": 201, "auth_token": "token"}
+        mock_response = Mock()
+        mock_response.json.return_value = expected_response
+        api.session.post = Mock(return_value=mock_response)
+
+        api.login()
+
+        api.session.post.assert_called_once()
+        # Check that verify=True is passed
+        assert api.session.post.call_args[1]["verify"] is True
+
+    @patch("requests.Session.request")
+    def test_verify_custom_ca_bundle(self, mock_request):
+        """Test that a custom CA bundle path is passed correctly."""
+        custom_ca = "/path/to/ca-bundle.pem"
+        api = QuadsApi(self.username, self.password, self.base_url, verify=custom_ca)
+        expected_response = {"hosts": []}
+        mock_response = Mock()
+        mock_response.json.return_value = expected_response
+        mock_request.return_value = mock_response
+
+        api.get_hosts()
+
+        mock_request.assert_called_once()
+        # Check that custom CA bundle path is passed
+        assert mock_request.call_args[1]["verify"] == custom_ca
+
+    def test_verify_custom_ca_bundle_login(self):
+        """Test that a custom CA bundle path is passed correctly in login method."""
+        custom_ca = "/path/to/ca-bundle.pem"
+        api = QuadsApi(self.username, self.password, self.base_url, verify=custom_ca)
+        expected_response = {"status_code": 201, "auth_token": "token"}
+        mock_response = Mock()
+        mock_response.json.return_value = expected_response
+        api.session.post = Mock(return_value=mock_response)
+
+        api.login()
+
+        api.session.post.assert_called_once()
+        # Check that custom CA bundle path is passed
+        assert api.session.post.call_args[1]["verify"] == custom_ca
