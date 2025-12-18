@@ -1,5 +1,6 @@
 from json import JSONDecodeError
 from typing import Optional
+from typing import Union
 from urllib.parse import urljoin
 
 from requests import Session
@@ -16,10 +17,29 @@ class QuadsBase:
     Base class for the Quads API
     """
 
-    def __init__(self, username: str, password: str, base_url: str):
+    def __init__(
+        self,
+        username: str,
+        password: str,
+        base_url: str,
+        verify: Union[bool, str] = False,
+    ):
+        """
+        Initialize QuadsBase.
+
+        Args:
+            username: Username for QUADS authentication
+            password: Password for QUADS authentication
+            base_url: Base URL for the QUADS API
+            verify: Controls TLS certificate verification. Can be:
+                - False: Disable certificate verification (default, for backward compatibility)
+                - True: Enable verification using default CA bundle
+                - str: Path to a custom CA bundle file
+        """
         self.username = username
         self.password = password
         self.base_url = urljoin(base_url, "api/v3/")
+        self.verify = verify
         self.session = Session()
         retries = Retry(total=5, backoff_factor=1, status_forcelist=[502, 503, 504])
         self.session.mount("http://", HTTPAdapter(max_retries=retries))
@@ -40,7 +60,7 @@ class QuadsBase:
             method,
             urljoin(self.base_url, endpoint),
             json=data,
-            verify=False,
+            verify=self.verify,
         )
         if _response.status_code == 500:
             raise APIServerException("Check the flask server logs")
