@@ -37,11 +37,18 @@ jobs:
 
     - name: Bump version
       run: |
-        if git rev-parse "v$(bump2version --dry-run --list patch | grep new_version | sed -r s,"^.*=",,)" >/dev/null 2>&1; then
-          echo "Tag already exists. Skipping version bump."
-        else
-          bump2version patch
-        fi
+        # Keep bumping until we find a version without an existing tag
+        for i in {1..10}; do
+          NEW_VERSION=$(bump2version --dry-run --list patch | grep new_version | sed -r 's/^.*=//')
+          if git rev-parse "v${NEW_VERSION}" >/dev/null 2>&1; then
+            echo "Tag v${NEW_VERSION} already exists, bumping past it..."
+            bump2version patch --no-tag --no-commit --allow-dirty
+          else
+            echo "Bumping to v${NEW_VERSION}"
+            bump2version patch
+            break
+          fi
+        done
 
     - name: Build package
       run: python setup.py sdist bdist_wheel
