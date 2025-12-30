@@ -73,6 +73,16 @@ For merging, you should:
 3. Add a note to ``CHANGELOG.rst`` about the changes.
 4. Add yourself to ``AUTHORS.rst``.
 
+Release Process
+===============
+
+To release a new version, run the following command::
+
+    bumpversion patch
+
+This will increment the version number and commit the changes.
+
+
 Tips
 ----
 
