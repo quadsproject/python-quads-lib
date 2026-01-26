@@ -1,6 +1,7 @@
 from pathlib import Path
 from typing import Optional
-from urllib.parse import urlencode, urljoin
+from urllib.parse import urlencode
+from urllib.parse import urljoin
 
 from quads_lib.base import QuadsBase
 from quads_lib.decorators import returns
@@ -16,24 +17,17 @@ class QuadsApi(QuadsBase):
         json_response = self._make_request(
             "POST",
             "register",
-            {
-                "email": self.username,
-                "password": self.password
-            },
+            {"email": self.username, "password": self.password},
         )
         return json_response
 
     def login(self) -> dict:
         endpoint = urljoin(self.base_url, "login")
-        _response = self.session.post(
-            endpoint, auth=self.auth, verify=self.verify
-        )
+        _response = self.session.post(endpoint, auth=self.auth, verify=self.verify)
         json_response = _response.json()
         if json_response.get("status_code") == 201:
             self.token = json_response.get("auth_token")
-            self.session.headers.update(
-                {"Authorization": f"Bearer {self.token}"}
-            )
+            self.session.headers.update({"Authorization": f"Bearer {self.token}"})
         return json_response
 
     def logout(self) -> dict:
@@ -212,10 +206,7 @@ class QuadsApi(QuadsBase):
     def create_assignment(self, data: dict) -> dict:
         response = self.post("assignments", data)
         if response and {"id", "cloud"} <= response.keys():
-            print(
-                f"Assignment created - ID: {response['id']}, "
-                f"Cloud: {response['cloud']['name']}"
-            )
+            print(f"Assignment created - ID: {response['id']}, Cloud: {response['cloud']['name']}")
         return response
 
     @returns("Assignment")
@@ -223,10 +214,7 @@ class QuadsApi(QuadsBase):
         endpoint = Path("assignments") / "self"
         response = self.post(str(endpoint), data)
         if response and {"id", "cloud"} <= response.keys():
-            print(
-                f"Self-assignment created - ID: {response['id']}, "
-                f"Cloud: {response['cloud']['name']}"
-            )
+            print(f"Self-assignment created - ID: {response['id']}, Cloud: {response['cloud']['name']}")
         return response
 
     @returns("Assignment")
@@ -356,14 +344,4 @@ class QuadsApi(QuadsBase):
         return self.post("vlans", data)
 
     # Moves
-    def get_moves(self, date: Optional[str] = None) -> dict:
-        url = "moves"
-        if date:
-            url_params = urlencode({"date": date})
-            url = f"moves?{url_params}"
-        json_response = self.get(url)
-        return json_response
-
-    def get_version(self) -> dict:
-        json_response = self.get("version")
-        return json_response
+    def get_moves(self
