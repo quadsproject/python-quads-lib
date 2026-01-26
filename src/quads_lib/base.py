@@ -32,7 +32,8 @@ class QuadsBase:
             password: Password for QUADS authentication
             base_url: Base URL for the QUADS API
             verify: Controls TLS certificate verification. Can be:
-                - False: Disable certificate verification (default, for backward compatibility)
+                - False: Disable certificate verification (default, for
+                  backward compatibility)
                 - True: Enable verification using default CA bundle
                 - str: Path to a custom CA bundle file
         """
