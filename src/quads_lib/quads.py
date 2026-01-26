@@ -344,4 +344,14 @@ class QuadsApi(QuadsBase):
         return self.post("vlans", data)
 
     # Moves
-    def get_moves(self
+    def get_moves(self, date: Optional[str] = None) -> dict:
+        url = "moves"
+        if date:
+            url_params = urlencode({"date": date})
+            url = f"moves?{url_params}"
+        json_response = self.get(url)
+        return json_response
+
+    def get_version(self) -> dict:
+        json_response = self.get("version")
+        return json_response
