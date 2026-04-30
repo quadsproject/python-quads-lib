@@ -4,8 +4,8 @@ Release:        1%{?dist}
 Summary:        Python client library for interacting with the QUADS API
 
 License:        LGPL-3.0-only
-URL:            https://github.com/quadsproject/python-quads-lib
-Source0:        %{name}-%{version}.tar.gz
+URL:            https://quads.dev
+Source0:        https://github.com/quadsproject/python-quads-lib/archive/%{branch}.tar.gz#/%{name}-%{version}-%{release}.tar.gz
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
