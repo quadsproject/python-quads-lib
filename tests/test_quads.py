@@ -21,7 +21,12 @@ class TestQuadsApi:
 
     @patch("requests.Session.request")
     def test_get_hosts(self, mock_get):
-        expected_response = {"hosts": [{"name": "host1", "model": "model1"}, {"name": "host2", "model": "model2"}]}
+        expected_response = {
+            "hosts": [
+                {"name": "host1", "model": "model1"},
+                {"name": "host2", "model": "model2"},
+            ]
+        }
         mock_response = Mock()
         mock_response.json.return_value = expected_response
         mock_get.return_value = mock_response
@@ -57,7 +62,10 @@ class TestQuadsApi:
     @patch("requests.Session.request")
     def test_get_host_models(self, mock_get):
         expected_response = {
-            "model1": [{"name": "host1", "model": "model1"}, {"name": "host2", "model": "model1"}],
+            "model1": [
+                {"name": "host1", "model": "model1"},
+                {"name": "host2", "model": "model1"},
+            ],
             "model2": [{"name": "host3", "model": "model2"}],
         }
         mock_response = Mock()
@@ -124,7 +132,12 @@ class TestQuadsApi:
 
     @patch("requests.Session.request")
     def test_filter_hosts(self, mock_get):
-        expected_response = {"hosts": [{"name": "host1", "model": "model1"}, {"name": "host2", "model": "model1"}]}
+        expected_response = {
+            "hosts": [
+                {"name": "host1", "model": "model1"},
+                {"name": "host2", "model": "model1"},
+            ]
+        }
         mock_response = Mock()
         mock_response.json.return_value = expected_response
         mock_get.return_value = mock_response
@@ -182,7 +195,12 @@ class TestQuadsApi:
 
     @patch("requests.Session.request")
     def test_filter_clouds(self, mock_get):
-        expected_response = {"clouds": [{"name": "cloud1", "owner": "user1"}, {"name": "cloud2", "owner": "user1"}]}
+        expected_response = {
+            "clouds": [
+                {"name": "cloud1", "owner": "user1"},
+                {"name": "cloud2", "owner": "user1"},
+            ]
+        }
         mock_response = Mock()
         mock_response.json.return_value = expected_response
         mock_get.return_value = mock_response
@@ -240,7 +258,12 @@ class TestQuadsApi:
 
     @patch("requests.Session.request")
     def test_filter_assignments(self, mock_get):
-        expected_response = {"assignments": [{"id": 1, "cloud": "cloud1", "host": "host1"}, {"id": 2, "cloud": "cloud1", "host": "host2"}]}
+        expected_response = {
+            "assignments": [
+                {"id": 1, "cloud": "cloud1", "host": "host1"},
+                {"id": 2, "cloud": "cloud1", "host": "host2"},
+            ]
+        }
         mock_response = Mock()
         mock_response.json.return_value = expected_response
         mock_get.return_value = mock_response
@@ -298,7 +321,12 @@ class TestQuadsApi:
 
     @patch("requests.Session.request")
     def test_get_host(self, mock_get):
-        expected_response = {"name": "host1", "model": "model1", "cloud": "cloud1", "interfaces": []}
+        expected_response = {
+            "name": "host1",
+            "model": "model1",
+            "cloud": "cloud1",
+            "interfaces": [],
+        }
         mock_response = Mock()
         mock_response.json.return_value = expected_response
         mock_get.return_value = mock_response
@@ -343,7 +371,12 @@ class TestQuadsApi:
 
     @patch("requests.Session.request")
     def test_create_host(self, mock_post):
-        host_data = {"name": "new-host", "model": "model1", "cloud": "cloud1", "interfaces": []}
+        host_data = {
+            "name": "new-host",
+            "model": "model1",
+            "cloud": "cloud1",
+            "interfaces": [],
+        }
         mock_response = Mock()
         mock_response.json.return_value = host_data
         mock_post.return_value = mock_response
@@ -556,7 +589,10 @@ class TestQuadsApi:
     @patch("requests.Session.request")
     def test_get_clouds(self, mock_get):
         expected_response = {
-            "clouds": [{"name": "cloud1", "owner": "user1", "ticket": "123"}, {"name": "cloud2", "owner": "user2", "ticket": "456"}]
+            "clouds": [
+                {"name": "cloud1", "owner": "user1", "ticket": "123"},
+                {"name": "cloud2", "owner": "user2", "ticket": "456"},
+            ]
         }
         mock_response = Mock()
         mock_response.json.return_value = expected_response
@@ -603,7 +639,10 @@ class TestQuadsApi:
     @patch("requests.Session.request")
     def test_get_free_clouds(self, mock_get):
         expected_response = {
-            "clouds": [{"name": "cloud1", "owner": "user1", "status": "free"}, {"name": "cloud2", "owner": "user2", "status": "free"}]
+            "clouds": [
+                {"name": "cloud1", "owner": "user1", "status": "free"},
+                {"name": "cloud2", "owner": "user2", "status": "free"},
+            ]
         }
         mock_response = Mock()
         mock_response.json.return_value = expected_response
@@ -650,7 +689,12 @@ class TestQuadsApi:
     @patch("requests.Session.request")
     def test_get_cloud(self, mock_get):
         cloud_name = "test-cloud"
-        expected_response = {"name": "test-cloud", "owner": "user1", "ticket": "123", "description": "Test cloud environment"}
+        expected_response = {
+            "name": "test-cloud",
+            "owner": "user1",
+            "ticket": "123",
+            "description": "Test cloud environment",
+        }
         mock_response = Mock()
         mock_response.json.return_value = expected_response
         mock_get.return_value = mock_response
@@ -693,7 +737,10 @@ class TestQuadsApi:
         mock_get.assert_called_once()
         called_url = str(mock_get.call_args[0][1])
         assert called_url.endswith(
-            ("/clouds/summary?start_date=2024-03-20&end_date=2024-03-21", "/clouds/summary?end_date=2024-03-21&start_date=2024-03-20")
+            (
+                "/clouds/summary?start_date=2024-03-20&end_date=2024-03-21",
+                "/clouds/summary?end_date=2024-03-21&start_date=2024-03-20",
+            )
         )
         assert result == expected_response
 
@@ -731,7 +778,12 @@ class TestQuadsApi:
 
     @patch("requests.Session.request")
     def test_create_cloud(self, mock_post):
-        cloud_data = {"name": "new-cloud", "owner": "user1", "ticket": "123", "description": "New test cloud"}
+        cloud_data = {
+            "name": "new-cloud",
+            "owner": "user1",
+            "ticket": "123",
+            "description": "New test cloud",
+        }
         mock_response = Mock()
         mock_response.status_code = 200
         mock_response.json.return_value = cloud_data
@@ -781,7 +833,11 @@ class TestQuadsApi:
     @patch("requests.Session.request")
     def test_update_cloud(self, mock_patch):
         cloud_name = "existing-cloud"
-        update_data = {"owner": "new-owner", "ticket": "456", "description": "Updated description"}
+        update_data = {
+            "owner": "new-owner",
+            "ticket": "456",
+            "description": "Updated description",
+        }
         mock_response = Mock()
         mock_response.status_code = 200
         mock_response.json.return_value = update_data
@@ -850,8 +906,18 @@ class TestQuadsApi:
     def test_get_schedules(self, mock_get):
         expected_response = {
             "schedules": [
-                {"id": 1, "cloud": "cloud1", "start": "2024-03-20", "end": "2024-03-21"},
-                {"id": 2, "cloud": "cloud2", "start": "2024-03-22", "end": "2024-03-23"},
+                {
+                    "id": 1,
+                    "cloud": "cloud1",
+                    "start": "2024-03-20",
+                    "end": "2024-03-21",
+                },
+                {
+                    "id": 2,
+                    "cloud": "cloud2",
+                    "start": "2024-03-22",
+                    "end": "2024-03-23",
+                },
             ]
         }
         mock_response = Mock()
@@ -867,7 +933,11 @@ class TestQuadsApi:
     @patch("requests.Session.request")
     def test_get_schedules_with_params(self, mock_get):
         query_data = {"cloud": "cloud1", "start": "2024-03-20"}
-        expected_response = {"schedules": [{"id": 1, "cloud": "cloud1", "start": "2024-03-20", "end": "2024-03-21"}]}
+        expected_response = {
+            "schedules": [
+                {"id": 1, "cloud": "cloud1", "start": "2024-03-20", "end": "2024-03-21"}
+            ]
+        }
         mock_response = Mock()
         mock_response.json.return_value = expected_response
         mock_get.return_value = mock_response
@@ -875,14 +945,20 @@ class TestQuadsApi:
         result = self.api.get_schedules(query_data)
 
         mock_get.assert_called_once()
-        assert str(mock_get.call_args[0][1]).endswith("/schedules?cloud=cloud1&start=2024-03-20") or str(mock_get.call_args[0][1]).endswith(
+        assert str(mock_get.call_args[0][1]).endswith(
+            "/schedules?cloud=cloud1&start=2024-03-20"
+        ) or str(mock_get.call_args[0][1]).endswith(
             "/schedules?start=2024-03-20&cloud=cloud1"
         )
         assert result == expected_response
 
     @patch("requests.Session.request")
     def test_get_current_schedules(self, mock_get):
-        expected_response = {"schedules": [{"id": 1, "cloud": "cloud1", "start": "2024-03-20", "end": "2024-03-21"}]}
+        expected_response = {
+            "schedules": [
+                {"id": 1, "cloud": "cloud1", "start": "2024-03-20", "end": "2024-03-21"}
+            ]
+        }
         mock_response = Mock()
         mock_response.json.return_value = expected_response
         mock_get.return_value = mock_response
@@ -896,7 +972,11 @@ class TestQuadsApi:
     @patch("requests.Session.request")
     def test_get_current_schedules_with_params(self, mock_get):
         query_data = {"cloud": "cloud1"}
-        expected_response = {"schedules": [{"id": 1, "cloud": "cloud1", "start": "2024-03-20", "end": "2024-03-21"}]}
+        expected_response = {
+            "schedules": [
+                {"id": 1, "cloud": "cloud1", "start": "2024-03-20", "end": "2024-03-21"}
+            ]
+        }
         mock_response = Mock()
         mock_response.json.return_value = expected_response
         mock_get.return_value = mock_response
@@ -928,7 +1008,12 @@ class TestQuadsApi:
     @patch("requests.Session.request")
     def test_get_schedule(self, mock_get):
         schedule_id = 123
-        expected_response = {"id": 123, "cloud": "cloud1", "start": "2024-03-20", "end": "2024-03-21"}
+        expected_response = {
+            "id": 123,
+            "cloud": "cloud1",
+            "start": "2024-03-20",
+            "end": "2024-03-21",
+        }
         mock_response = Mock()
         mock_response.json.return_value = expected_response
         mock_get.return_value = mock_response
@@ -943,8 +1028,18 @@ class TestQuadsApi:
     def test_get_future_schedules(self, mock_get):
         expected_response = {
             "schedules": [
-                {"id": 1, "cloud": "cloud1", "start": "2024-03-20", "end": "2024-03-21"},
-                {"id": 2, "cloud": "cloud2", "start": "2024-03-22", "end": "2024-03-23"},
+                {
+                    "id": 1,
+                    "cloud": "cloud1",
+                    "start": "2024-03-20",
+                    "end": "2024-03-21",
+                },
+                {
+                    "id": 2,
+                    "cloud": "cloud2",
+                    "start": "2024-03-22",
+                    "end": "2024-03-23",
+                },
             ]
         }
         mock_response = Mock()
@@ -960,7 +1055,11 @@ class TestQuadsApi:
     @patch("requests.Session.request")
     def test_get_future_schedules_with_params(self, mock_get):
         query_data = {"cloud": "cloud1"}
-        expected_response = {"schedules": [{"id": 1, "cloud": "cloud1", "start": "2024-03-20", "end": "2024-03-21"}]}
+        expected_response = {
+            "schedules": [
+                {"id": 1, "cloud": "cloud1", "start": "2024-03-20", "end": "2024-03-21"}
+            ]
+        }
         mock_response = Mock()
         mock_response.json.return_value = expected_response
         mock_get.return_value = mock_response
@@ -1054,7 +1153,12 @@ class TestQuadsApi:
 
     @patch("requests.Session.request")
     def test_get_available(self, mock_get):
-        expected_response = {"hosts": [{"name": "host1", "model": "model1"}, {"name": "host2", "model": "model2"}]}
+        expected_response = {
+            "hosts": [
+                {"name": "host1", "model": "model1"},
+                {"name": "host2", "model": "model2"},
+            ]
+        }
         mock_response = Mock()
         mock_response.json.return_value = expected_response
         mock_get.return_value = mock_response
@@ -1067,7 +1171,11 @@ class TestQuadsApi:
 
     @patch("requests.Session.request")
     def test_filter_available(self, mock_get):
-        filter_data = {"start_date": "2024-03-20", "end_date": "2024-03-21", "model": "model1"}
+        filter_data = {
+            "start_date": "2024-03-20",
+            "end_date": "2024-03-21",
+            "model": "model1",
+        }
         expected_response = {"hosts": [{"name": "host1", "model": "model1"}]}
         mock_response = Mock()
         mock_response.json.return_value = expected_response
@@ -1084,7 +1192,12 @@ class TestQuadsApi:
 
     @patch("requests.Session.request")
     def test_create_assignment(self, mock_post):
-        assignment_data = {"cloud": "cloud1", "host": "host1", "start": "2024-03-20", "end": "2024-03-21"}
+        assignment_data = {
+            "cloud": "cloud1",
+            "host": "host1",
+            "start": "2024-03-20",
+            "end": "2024-03-21",
+        }
         mock_response = Mock()
         mock_response.status_code = 200
         mock_response.json.return_value = assignment_data
@@ -1125,7 +1238,9 @@ class TestQuadsApi:
         result = self.api.update_notification(notification_id, update_data)
 
         mock_patch.assert_called_once()
-        assert str(mock_patch.call_args[0][1]).endswith(f"/notifications/{notification_id}")
+        assert str(mock_patch.call_args[0][1]).endswith(
+            f"/notifications/{notification_id}"
+        )
         assert mock_patch.call_args[1]["json"] == update_data
         assert result == update_data
 
@@ -1177,7 +1292,12 @@ class TestQuadsApi:
     @patch("requests.Session.request")
     def test_get_active_cloud_assignment(self, mock_get):
         cloud_name = "cloud1"
-        expected_response = {"id": 123, "cloud": "cloud1", "host": "host1", "status": "active"}
+        expected_response = {
+            "id": 123,
+            "cloud": "cloud1",
+            "host": "host1",
+            "status": "active",
+        }
         mock_response = Mock()
         mock_response.json.return_value = expected_response
         mock_get.return_value = mock_response
@@ -1185,7 +1305,9 @@ class TestQuadsApi:
         result = self.api.get_active_cloud_assignment(cloud_name)
 
         mock_get.assert_called_once()
-        assert str(mock_get.call_args[0][1]).endswith(f"/assignments/active/{cloud_name}")
+        assert str(mock_get.call_args[0][1]).endswith(
+            f"/assignments/active/{cloud_name}"
+        )
         assert result == expected_response
 
     @patch("requests.Session.request")
@@ -1210,7 +1332,10 @@ class TestQuadsApi:
     def test_get_host_interface(self, mock_get):
         hostname = "host1"
         expected_response = {
-            "interfaces": [{"name": "eth0", "mac_address": "00:11:22:33:44:55"}, {"name": "eth1", "mac_address": "00:11:22:33:44:66"}]
+            "interfaces": [
+                {"name": "eth0", "mac_address": "00:11:22:33:44:55"},
+                {"name": "eth1", "mac_address": "00:11:22:33:44:66"},
+            ]
         }
         mock_response = Mock()
         mock_response.json.return_value = expected_response
@@ -1268,13 +1393,19 @@ class TestQuadsApi:
         result = self.api.remove_interface(hostname, if_name)
 
         mock_delete.assert_called_once()
-        assert str(mock_delete.call_args[0][1]).endswith(f"/interfaces/{hostname}/{if_name}")
+        assert str(mock_delete.call_args[0][1]).endswith(
+            f"/interfaces/{hostname}/{if_name}"
+        )
         assert result == {}
 
     @patch("requests.Session.request")
     def test_create_interface(self, mock_post):
         hostname = "host1"
-        interface_data = {"name": "eth0", "mac_address": "00:11:22:33:44:55", "switch_port": "Gi1/0/1"}
+        interface_data = {
+            "name": "eth0",
+            "mac_address": "00:11:22:33:44:55",
+            "switch_port": "Gi1/0/1",
+        }
         mock_response = Mock()
         mock_response.status_code = 200
         mock_response.json.return_value = interface_data
@@ -1451,7 +1582,11 @@ class TestQuadsApi:
     @patch("requests.Session.request")
     def test_get_vlan(self, mock_get):
         vlan_id = 100
-        expected_response = {"id": 100, "name": "prod", "description": "Production network"}
+        expected_response = {
+            "id": 100,
+            "name": "prod",
+            "description": "Production network",
+        }
         mock_response = Mock()
         mock_response.json.return_value = expected_response
         mock_get.return_value = mock_response
@@ -1464,7 +1599,11 @@ class TestQuadsApi:
 
     @patch("requests.Session.request")
     def test_get_free_vlan(self, mock_get):
-        expected_response = {"id": 100, "name": "prod", "description": "Production network"}
+        expected_response = {
+            "id": 100,
+            "name": "prod",
+            "description": "Production network",
+        }
         mock_response = Mock()
         mock_response.json.return_value = expected_response
         mock_get.return_value = mock_response
@@ -1510,8 +1649,18 @@ class TestQuadsApi:
     def test_get_moves(self, mock_get):
         expected_response = {
             "moves": [
-                {"id": 1, "host": "host1", "from_cloud": "cloud1", "to_cloud": "cloud2"},
-                {"id": 2, "host": "host2", "from_cloud": "cloud2", "to_cloud": "cloud3"},
+                {
+                    "id": 1,
+                    "host": "host1",
+                    "from_cloud": "cloud1",
+                    "to_cloud": "cloud2",
+                },
+                {
+                    "id": 2,
+                    "host": "host2",
+                    "from_cloud": "cloud2",
+                    "to_cloud": "cloud3",
+                },
             ]
         }
         mock_response = Mock()
@@ -1527,7 +1676,11 @@ class TestQuadsApi:
     @patch("requests.Session.request")
     def test_get_moves_with_date(self, mock_get):
         date = "2024-03-20"
-        expected_response = {"moves": [{"id": 1, "host": "host1", "from_cloud": "cloud1", "to_cloud": "cloud2"}]}
+        expected_response = {
+            "moves": [
+                {"id": 1, "host": "host1", "from_cloud": "cloud1", "to_cloud": "cloud2"}
+            ]
+        }
         mock_response = Mock()
         mock_response.json.return_value = expected_response
         mock_get.return_value = mock_response
@@ -1609,12 +1762,17 @@ class TestQuadsApi:
         with patch.object(self.api, "post") as mock_post:
             mock_post.return_value = expected_response
             result = self.api.create_self_assignment(test_data)
-            mock_post.assert_called_once_with(str(Path("assignments") / "self"), test_data)
+            mock_post.assert_called_once_with(
+                str(Path("assignments") / "self"), test_data
+            )
             assert result == expected_response
 
     @patch("requests.Session.request")
     def test_register_success(self, mock_post):
-        expected_response = {"status_code": 201, "message": "User registered successfully"}
+        expected_response = {
+            "status_code": 201,
+            "message": "User registered successfully",
+        }
         mock_response = Mock()
         mock_response.status_code = 201
         mock_response.json.return_value = expected_response
@@ -1627,7 +1785,11 @@ class TestQuadsApi:
 
     @patch("requests.Session.request")
     def test_login_success(self, mock_post):
-        expected_response = {"status_code": 201, "auth_token": "fake-token-123", "message": "Login successful"}
+        expected_response = {
+            "status_code": 201,
+            "auth_token": "fake-token-123",
+            "message": "Login successful",
+        }
         mock_response = Mock()
         mock_response.status_code = 201
         mock_response.json.return_value = expected_response
@@ -1681,7 +1843,12 @@ class TestQuadsApi:
     @patch("builtins.print")
     @patch("requests.Session.request")
     def test_create_assignment_logging(self, mock_request, mock_print):
-        assignment_data = {"cloud": "cloud1", "host": "host1", "start": "2025-06-20", "end": "2025-06-21"}
+        assignment_data = {
+            "cloud": "cloud1",
+            "host": "host1",
+            "start": "2025-06-20",
+            "end": "2025-06-21",
+        }
         response_data = {
             "id": 42,
             "cloud": {"name": "cloud1", "owner": "user1"},
@@ -1702,9 +1869,19 @@ class TestQuadsApi:
     @patch("builtins.print")
     @patch("requests.Session.request")
     def test_create_assignment_no_logging(self, mock_request, mock_print):
-        assignment_data = {"cloud": "cloud1", "host": "host1", "start": "2025-06-20", "end": "2025-06-21"}
+        assignment_data = {
+            "cloud": "cloud1",
+            "host": "host1",
+            "start": "2025-06-20",
+            "end": "2025-06-21",
+        }
         # Missing 'id' field in response - should not trigger logging
-        response_data = {"cloud": {"name": "cloud1", "owner": "user1"}, "host": "host1", "start": "2025-06-20", "end": "2025-06-21"}
+        response_data = {
+            "cloud": {"name": "cloud1", "owner": "user1"},
+            "host": "host1",
+            "start": "2025-06-20",
+            "end": "2025-06-21",
+        }
 
         mock_response = Mock()
         mock_response.status_code = 200
@@ -1718,9 +1895,18 @@ class TestQuadsApi:
     @patch("builtins.print")
     @patch("requests.Session.request")
     def test_create_assignment_limit_reached(self, mock_request, mock_print):
-        assignment_data = {"cloud": "cloud1", "host": "host1", "start": "2025-06-20", "end": "2025-06-21"}
+        assignment_data = {
+            "cloud": "cloud1",
+            "host": "host1",
+            "start": "2025-06-20",
+            "end": "2025-06-21",
+        }
         # Error response for scheduling limit reached
-        error_response = {"error": "Forbidden", "message": "Self scheduling limit reached", "status_code": 403}
+        error_response = {
+            "error": "Forbidden",
+            "message": "Self scheduling limit reached",
+            "status_code": 403,
+        }
 
         mock_response = Mock()
         mock_response.status_code = 403
@@ -1735,8 +1921,17 @@ class TestQuadsApi:
     @patch("builtins.print")
     @patch("requests.Session.request")
     def test_create_self_assignment_logging(self, mock_request, mock_print):
-        assignment_data = {"cloud": "cloud1", "start": "2025-06-20", "end": "2025-06-21"}
-        response_data = {"id": 123, "cloud": {"name": "cloud1", "owner": "user1"}, "start": "2025-06-20", "end": "2025-06-21"}
+        assignment_data = {
+            "cloud": "cloud1",
+            "start": "2025-06-20",
+            "end": "2025-06-21",
+        }
+        response_data = {
+            "id": 123,
+            "cloud": {"name": "cloud1", "owner": "user1"},
+            "start": "2025-06-20",
+            "end": "2025-06-21",
+        }
 
         mock_response = Mock()
         mock_response.status_code = 200
@@ -1745,12 +1940,18 @@ class TestQuadsApi:
 
         self.api.create_self_assignment(assignment_data)
 
-        mock_print.assert_called_once_with("Self-assignment created - ID: 123, Cloud: cloud1")
+        mock_print.assert_called_once_with(
+            "Self-assignment created - ID: 123, Cloud: cloud1"
+        )
 
     @patch("builtins.print")
     @patch("requests.Session.request")
     def test_create_self_assignment_no_logging(self, mock_request, mock_print):
-        assignment_data = {"cloud": "cloud1", "start": "2025-06-20", "end": "2025-06-21"}
+        assignment_data = {
+            "cloud": "cloud1",
+            "start": "2025-06-20",
+            "end": "2025-06-21",
+        }
         # Missing 'cloud' field in response - should not trigger logging
         response_data = {"id": 123, "start": "2025-06-20", "end": "2025-06-21"}
 
@@ -1766,9 +1967,17 @@ class TestQuadsApi:
     @patch("builtins.print")
     @patch("requests.Session.request")
     def test_create_self_assignment_limit_reached(self, mock_request, mock_print):
-        assignment_data = {"cloud": "cloud1", "start": "2025-06-20", "end": "2025-06-21"}
+        assignment_data = {
+            "cloud": "cloud1",
+            "start": "2025-06-20",
+            "end": "2025-06-21",
+        }
         # Error response for self scheduling limit reached
-        error_response = {"error": "Forbidden", "message": "Self scheduling limit reached", "status_code": 403}
+        error_response = {
+            "error": "Forbidden",
+            "message": "Self scheduling limit reached",
+            "status_code": 403,
+        }
 
         mock_response = Mock()
         mock_response.status_code = 403
@@ -1790,7 +1999,9 @@ class TestQuadsBase:
 
     @pytest.fixture
     def quads_base(self):
-        return QuadsBase(username=self.username, password=self.password, base_url=self.base_url)
+        return QuadsBase(
+            username=self.username, password=self.password, base_url=self.base_url
+        )
 
     def test_context_manager_enter(self, quads_base):
         quads_base.login = Mock()
