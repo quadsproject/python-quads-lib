@@ -933,11 +933,7 @@ class TestQuadsApi:
     @patch("requests.Session.request")
     def test_get_schedules_with_params(self, mock_get):
         query_data = {"cloud": "cloud1", "start": "2024-03-20"}
-        expected_response = {
-            "schedules": [
-                {"id": 1, "cloud": "cloud1", "start": "2024-03-20", "end": "2024-03-21"}
-            ]
-        }
+        expected_response = {"schedules": [{"id": 1, "cloud": "cloud1", "start": "2024-03-20", "end": "2024-03-21"}]}
         mock_response = Mock()
         mock_response.json.return_value = expected_response
         mock_get.return_value = mock_response
@@ -945,20 +941,14 @@ class TestQuadsApi:
         result = self.api.get_schedules(query_data)
 
         mock_get.assert_called_once()
-        assert str(mock_get.call_args[0][1]).endswith(
-            "/schedules?cloud=cloud1&start=2024-03-20"
-        ) or str(mock_get.call_args[0][1]).endswith(
+        assert str(mock_get.call_args[0][1]).endswith("/schedules?cloud=cloud1&start=2024-03-20") or str(mock_get.call_args[0][1]).endswith(
             "/schedules?start=2024-03-20&cloud=cloud1"
         )
         assert result == expected_response
 
     @patch("requests.Session.request")
     def test_get_current_schedules(self, mock_get):
-        expected_response = {
-            "schedules": [
-                {"id": 1, "cloud": "cloud1", "start": "2024-03-20", "end": "2024-03-21"}
-            ]
-        }
+        expected_response = {"schedules": [{"id": 1, "cloud": "cloud1", "start": "2024-03-20", "end": "2024-03-21"}]}
         mock_response = Mock()
         mock_response.json.return_value = expected_response
         mock_get.return_value = mock_response
@@ -972,11 +962,7 @@ class TestQuadsApi:
     @patch("requests.Session.request")
     def test_get_current_schedules_with_params(self, mock_get):
         query_data = {"cloud": "cloud1"}
-        expected_response = {
-            "schedules": [
-                {"id": 1, "cloud": "cloud1", "start": "2024-03-20", "end": "2024-03-21"}
-            ]
-        }
+        expected_response = {"schedules": [{"id": 1, "cloud": "cloud1", "start": "2024-03-20", "end": "2024-03-21"}]}
         mock_response = Mock()
         mock_response.json.return_value = expected_response
         mock_get.return_value = mock_response
@@ -1055,11 +1041,7 @@ class TestQuadsApi:
     @patch("requests.Session.request")
     def test_get_future_schedules_with_params(self, mock_get):
         query_data = {"cloud": "cloud1"}
-        expected_response = {
-            "schedules": [
-                {"id": 1, "cloud": "cloud1", "start": "2024-03-20", "end": "2024-03-21"}
-            ]
-        }
+        expected_response = {"schedules": [{"id": 1, "cloud": "cloud1", "start": "2024-03-20", "end": "2024-03-21"}]}
         mock_response = Mock()
         mock_response.json.return_value = expected_response
         mock_get.return_value = mock_response
@@ -1238,9 +1220,7 @@ class TestQuadsApi:
         result = self.api.update_notification(notification_id, update_data)
 
         mock_patch.assert_called_once()
-        assert str(mock_patch.call_args[0][1]).endswith(
-            f"/notifications/{notification_id}"
-        )
+        assert str(mock_patch.call_args[0][1]).endswith(f"/notifications/{notification_id}")
         assert mock_patch.call_args[1]["json"] == update_data
         assert result == update_data
 
@@ -1305,9 +1285,7 @@ class TestQuadsApi:
         result = self.api.get_active_cloud_assignment(cloud_name)
 
         mock_get.assert_called_once()
-        assert str(mock_get.call_args[0][1]).endswith(
-            f"/assignments/active/{cloud_name}"
-        )
+        assert str(mock_get.call_args[0][1]).endswith(f"/assignments/active/{cloud_name}")
         assert result == expected_response
 
     @patch("requests.Session.request")
@@ -1393,9 +1371,7 @@ class TestQuadsApi:
         result = self.api.remove_interface(hostname, if_name)
 
         mock_delete.assert_called_once()
-        assert str(mock_delete.call_args[0][1]).endswith(
-            f"/interfaces/{hostname}/{if_name}"
-        )
+        assert str(mock_delete.call_args[0][1]).endswith(f"/interfaces/{hostname}/{if_name}")
         assert result == {}
 
     @patch("requests.Session.request")
@@ -1676,11 +1652,7 @@ class TestQuadsApi:
     @patch("requests.Session.request")
     def test_get_moves_with_date(self, mock_get):
         date = "2024-03-20"
-        expected_response = {
-            "moves": [
-                {"id": 1, "host": "host1", "from_cloud": "cloud1", "to_cloud": "cloud2"}
-            ]
-        }
+        expected_response = {"moves": [{"id": 1, "host": "host1", "from_cloud": "cloud1", "to_cloud": "cloud2"}]}
         mock_response = Mock()
         mock_response.json.return_value = expected_response
         mock_get.return_value = mock_response
@@ -1762,9 +1734,7 @@ class TestQuadsApi:
         with patch.object(self.api, "post") as mock_post:
             mock_post.return_value = expected_response
             result = self.api.create_self_assignment(test_data)
-            mock_post.assert_called_once_with(
-                str(Path("assignments") / "self"), test_data
-            )
+            mock_post.assert_called_once_with(str(Path("assignments") / "self"), test_data)
             assert result == expected_response
 
     @patch("requests.Session.request")
@@ -1940,9 +1910,7 @@ class TestQuadsApi:
 
         self.api.create_self_assignment(assignment_data)
 
-        mock_print.assert_called_once_with(
-            "Self-assignment created - ID: 123, Cloud: cloud1"
-        )
+        mock_print.assert_called_once_with("Self-assignment created - ID: 123, Cloud: cloud1")
 
     @patch("builtins.print")
     @patch("requests.Session.request")
@@ -1999,9 +1967,7 @@ class TestQuadsBase:
 
     @pytest.fixture
     def quads_base(self):
-        return QuadsBase(
-            username=self.username, password=self.password, base_url=self.base_url
-        )
+        return QuadsBase(username=self.username, password=self.password, base_url=self.base_url)
 
     def test_context_manager_enter(self, quads_base):
         quads_base.login = Mock()
