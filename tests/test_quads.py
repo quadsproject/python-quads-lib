@@ -506,7 +506,7 @@ class TestQuadsApi:
         hostname = "test-host"
         query_data = {"start_date": "2024-03-20", "end_date": "2024-03-21"}
         mock_response = Mock()
-        mock_response.json.return_value = "true"
+        mock_response.json.return_value = {hostname: "True"}
         mock_get.return_value = mock_response
 
         result = self.api.is_available(hostname, query_data)
@@ -526,7 +526,7 @@ class TestQuadsApi:
         hostname = "test-host"
         query_data = {"start_date": "2024-03-20", "end_date": "2024-03-21"}
         mock_response = Mock()
-        mock_response.json.return_value = "false"
+        mock_response.json.return_value = {hostname: "False"}
         mock_get.return_value = mock_response
 
         result = self.api.is_available(hostname, query_data)
