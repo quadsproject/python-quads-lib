@@ -90,7 +90,8 @@ class QuadsApi(QuadsBase):
     def is_available(self, hostname: str, data: dict) -> bool:
         url_params = urlencode(data)
         endpoint = Path("available") / hostname
-        json_response = self.get(f"{endpoint}?{url_params}")
+        full_url = f"{endpoint}?{url_params}"
+        json_response = self.get(full_url)
         # Server returns {hostname: "True"} or {hostname: "False"}
         return json_response.get(hostname) == "True"
 

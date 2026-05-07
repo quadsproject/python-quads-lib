@@ -22,6 +22,8 @@ ignore = [
     "E501", # pycodestyle line-too-long
     "S105", # Possible hardcoded password
     "S106", # Hardcoded password
+    "COM812", # conflicts with black
+    "ISC001", # conflicts with black
 ]
 select = [
     "B", # flake8-bugbear
