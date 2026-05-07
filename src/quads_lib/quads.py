@@ -91,7 +91,8 @@ class QuadsApi(QuadsBase):
         url_params = urlencode(data)
         endpoint = Path("available") / hostname
         json_response = self.get(f"{endpoint}?{url_params}")
-        return "true" in json_response
+        # Server returns {hostname: "True"} or {hostname: "False"}
+        return json_response.get(hostname) == "True"
 
     # Clouds
     @returns("List[Cloud]")
