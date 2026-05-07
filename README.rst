@@ -58,6 +58,14 @@ You can also install the in-development version with::
 
     pip install https://github.com/quadsproject/python-quads-lib/archive/development.zip
 
+RPM Installation
+----------------
+
+For Red Hat-based distributions (RHEL, Rocky, Fedora)::
+
+    dnf copr enable quadsdev/python3-quads -y
+    dnf install quads-lib
+
 
 Documentation
 =============
