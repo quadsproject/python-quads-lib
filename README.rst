@@ -61,7 +61,7 @@ You can also install the in-development version with::
 RPM Installation
 ----------------
 
-For Red Hat-based distributions (RHEL, Rocky, Fedora)::
+For Fedora Linux::
 
     dnf copr enable quadsdev/python3-quads -y
     dnf install quads-lib
