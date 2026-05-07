@@ -56,7 +56,9 @@ class QuadsBase:
         self.logout()
         self.session.close()
 
-    def _make_request(self, method: str, endpoint: str, data: Optional[dict] = None) -> dict:
+    def _make_request(
+        self, method: str, endpoint: str, data: Optional[dict] = None
+    ) -> dict:
         full_url = urljoin(self.base_url, endpoint)
         _response = self.session.request(
             method,
