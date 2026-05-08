@@ -1134,6 +1134,79 @@ class TestQuadsApi:
         assert result == schedule_data
 
     @patch("requests.Session.request")
+    def test_create_schedules_batch(self, mock_post):
+        batch_data = {
+            "cloud": "cloud1",
+            "hostnames": ["host1", "host2", "host3"],
+            "start": "2024-03-20 10:00",
+            "end": "2024-03-21 10:00",
+        }
+        expected_response = {
+            "assignment_id": 42,
+            "schedules_created": 3,
+            "hostnames": ["host1", "host2", "host3"],
+            "jira_updated": True,
+        }
+        mock_response = Mock()
+        mock_response.status_code = 200
+        mock_response.json.return_value = expected_response
+        mock_post.return_value = mock_response
+
+        result = self.api.create_schedules_batch(batch_data)
+
+        mock_post.assert_called_once()
+        assert str(mock_post.call_args[0][1]).endswith("/schedules/batch")
+        assert mock_post.call_args[1]["json"] == batch_data
+        assert result == expected_response
+
+    @patch("requests.Session.request")
+    def test_create_schedules_batch_with_assignment_params(self, mock_post):
+        batch_data = {
+            "cloud": "cloud2",
+            "hostnames": ["host1", "host2"],
+            "start": "now",
+            "end": "2024-03-21 10:00",
+            "description": "Test assignment",
+            "owner": "testuser",
+            "ticket": "JIRA-123",
+            "ccuser": "user1,user2",
+            "vlan": 1234,
+            "qinq": 1,
+        }
+        expected_response = {
+            "assignment_id": 158,
+            "schedules_created": 2,
+            "hostnames": ["host1", "host2"],
+            "jira_updated": True,
+        }
+        mock_response = Mock()
+        mock_response.status_code = 200
+        mock_response.json.return_value = expected_response
+        mock_post.return_value = mock_response
+
+        result = self.api.create_schedules_batch(batch_data)
+
+        mock_post.assert_called_once()
+        assert str(mock_post.call_args[0][1]).endswith("/schedules/batch")
+        assert mock_post.call_args[1]["json"] == batch_data
+        assert result == expected_response
+
+    @patch("requests.Session.request")
+    def test_create_schedules_batch_error(self, mock_post):
+        batch_data = {
+            "cloud": "cloud1",
+            "hostnames": ["host1"],
+            "start": "2024-03-20 10:00",
+            "end": "2024-03-21 10:00",
+        }
+        mock_response = Mock()
+        mock_response.status_code = 400
+        mock_post.return_value = mock_response
+
+        with pytest.raises(APIBadRequest):
+            self.api.create_schedules_batch(batch_data)
+
+    @patch("requests.Session.request")
     def test_get_available(self, mock_get):
         expected_response = {
             "hosts": [
