@@ -192,6 +192,9 @@ class QuadsApi(QuadsBase):
     def create_schedule(self, data: dict) -> dict:
         return self.post("schedules", data)
 
+    def create_schedules_batch(self, data: dict) -> dict:
+        return self.post("schedules/batch", data)
+
     # Available
     @returns("List[Host]")
     def get_available(self) -> dict:
