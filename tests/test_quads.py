@@ -1695,6 +1695,33 @@ class TestQuadsApi:
         assert result == vlan_data
 
     @patch("requests.Session.request")
+    def test_get_os_list(self, mock_get):
+        expected_response = [
+            {"Id": 1, "Title": "RHEL 9.4", "Release Name": "Plow", "Family": "rhel"},
+            {"Id": 2, "Title": "RHEL 8.10", "Release Name": "Ootpa", "Family": "rhel"},
+        ]
+        mock_response = Mock()
+        mock_response.json.return_value = expected_response
+        mock_get.return_value = mock_response
+
+        result = self.api.get_os_list()
+
+        mock_get.assert_called_once()
+        assert str(mock_get.call_args[0][1]).endswith("/hosts/os_list")
+        assert result == expected_response
+
+    @patch("requests.Session.request")
+    def test_get_os_list_empty(self, mock_get):
+        mock_response = Mock()
+        mock_response.json.return_value = []
+        mock_get.return_value = mock_response
+
+        result = self.api.get_os_list()
+
+        mock_get.assert_called_once()
+        assert result == []
+
+    @patch("requests.Session.request")
     def test_get_moves(self, mock_get):
         expected_response = {
             "moves": [
@@ -1775,6 +1802,15 @@ class TestQuadsApi:
 
         with pytest.raises(APIServerException, match="Check the flask server logs"):
             self.api.get_vlans()
+
+    @patch("requests.Session.request")
+    def test_get_os_list_error(self, mock_get):
+        mock_response = Mock()
+        mock_response.status_code = 500
+        mock_get.return_value = mock_response
+
+        with pytest.raises(APIServerException, match="Check the flask server logs"):
+            self.api.get_os_list()
 
     @patch("requests.Session.request")
     def test_get_version_error(self, mock_get):

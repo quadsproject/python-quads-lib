@@ -348,6 +348,13 @@ class QuadsApi(QuadsBase):
     def create_vlan(self, data: dict) -> dict:
         return self.post("vlans", data)
 
+    # OS
+    @returns("List[OS]")
+    def get_os_list(self) -> dict:
+        endpoint = Path("hosts") / "os_list"
+        json_response = self.get(str(endpoint))
+        return json_response
+
     # Moves
     def get_moves(self, date: Optional[str] = None) -> dict:
         url = "moves"
