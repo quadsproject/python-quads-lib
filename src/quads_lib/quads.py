@@ -211,9 +211,7 @@ class QuadsApi(QuadsBase):
     def create_assignment(self, data: dict) -> dict:
         response = self.post("assignments", data)
         if response and {"id", "cloud"} <= response.keys():
-            print(
-                f"Assignment created - ID: {response['id']}, Cloud: {response['cloud']['name']}"
-            )
+            print(f"Assignment created - ID: {response['id']}, Cloud: {response['cloud']['name']}")
         return response
 
     @returns("Assignment")
@@ -221,9 +219,7 @@ class QuadsApi(QuadsBase):
         endpoint = Path("assignments") / "self"
         response = self.post(str(endpoint), data)
         if response and {"id", "cloud"} <= response.keys():
-            print(
-                f"Self-assignment created - ID: {response['id']}, Cloud: {response['cloud']['name']}"
-            )
+            print(f"Self-assignment created - ID: {response['id']}, Cloud: {response['cloud']['name']}")
         return response
 
     @returns("Assignment")
