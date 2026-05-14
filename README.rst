@@ -54,7 +54,7 @@ Installation
 
     pip install quads-lib
 
-You can also install the in-development version with::
+You can also install the development version with::
 
     pip install https://github.com/quadsproject/python-quads-lib/archive/development.zip
 
