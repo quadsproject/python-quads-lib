@@ -2067,6 +2067,66 @@ class TestQuadsApi:
         assert result == error_response
 
 
+class TestApiTokenAuth:
+    """Tests for qat_ API token authentication"""
+
+    def test_init_with_api_token(self):
+        """Test that api_token sets Bearer header and skips BasicAuth"""
+        api = QuadsApi("", "", "http://example.com/", api_token="qat_test123")
+        assert api.token == "qat_test123"
+        assert api.auth is None
+        assert api.session.headers.get("Authorization") == "Bearer qat_test123"
+
+    def test_init_without_api_token(self):
+        """Test that without api_token, BasicAuth is set"""
+        api = QuadsApi("user", "pass", "http://example.com/")
+        assert api.token is None
+        assert api.auth is not None
+
+    def test_login_noop_with_qat_token(self):
+        """Test that login() returns synthetic success for qat_ tokens"""
+        api = QuadsApi("", "", "http://example.com/", api_token="qat_abc123")
+        result = api.login()
+        assert result["status_code"] == 201
+        assert result["status"] == "success"
+        assert result["auth_token"] == "qat_abc123"
+
+    def test_login_noop_does_not_make_request(self):
+        """Test that login() with qat_ token makes no HTTP request"""
+        api = QuadsApi("", "", "http://example.com/", api_token="qat_abc123")
+        api.session.post = Mock(side_effect=AssertionError("should not be called"))
+        result = api.login()
+        assert result["status"] == "success"
+
+    @patch("requests.Session.request")
+    def test_get_user(self, mock_request):
+        """Test get_user calls /users/{email}"""
+        api = QuadsApi("user", "pass", "http://example.com/")
+        expected = {"email": "bob@example.com", "roles": ["user"]}
+        mock_response = Mock()
+        mock_response.json.return_value = expected
+        mock_request.return_value = mock_response
+
+        result = api.get_user("bob@example.com")
+
+        mock_request.assert_called_once()
+        assert str(mock_request.call_args[0][1]).endswith("/users/bob@example.com")
+        assert result == expected
+
+    @patch("requests.Session.request")
+    def test_get_user_with_api_token(self, mock_request):
+        """Test get_user works with api_token auth"""
+        api = QuadsApi("", "", "http://example.com/", api_token="qat_test")
+        expected = {"email": "admin@example.com", "roles": ["admin"]}
+        mock_response = Mock()
+        mock_response.json.return_value = expected
+        mock_request.return_value = mock_response
+
+        result = api.get_user("admin@example.com")
+
+        assert result == expected
+
+
 class TestQuadsBase:
     @pytest.fixture(autouse=True)
     def setup(self):
