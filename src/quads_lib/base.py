@@ -23,6 +23,7 @@ class QuadsBase:
         password: str,
         base_url: str,
         verify: Union[bool, str] = False,
+        api_token: Optional[str] = None,
     ):
         """
         Initialize QuadsBase.
@@ -36,6 +37,8 @@ class QuadsBase:
                   backward compatibility)
                 - True: Enable verification using default CA bundle
                 - str: Path to a custom CA bundle file
+            api_token: Pre-generated API token (qat_-prefixed) for direct
+                bearer auth without username/password login.
         """
         self.username = username
         self.password = password
@@ -44,9 +47,15 @@ class QuadsBase:
         self.session = Session()
         retries = Retry(total=5, backoff_factor=1, status_forcelist=[502, 503, 504])
         self.session.mount("http://", HTTPAdapter(max_retries=retries))
-        self.auth = HTTPBasicAuth(self.username, self.password)
-        self.token = None
         self.headers = {}
+
+        if api_token:
+            self.token = api_token
+            self.session.headers.update({"Authorization": f"Bearer {api_token}"})
+            self.auth = None
+        else:
+            self.auth = HTTPBasicAuth(self.username, self.password)
+            self.token = None
 
     def __enter__(self):
         self.login()
