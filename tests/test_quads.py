@@ -2083,20 +2083,11 @@ class TestApiTokenAuth:
         assert api.token is None
         assert api.auth is not None
 
-    def test_login_noop_with_qat_token(self):
-        """Test that login() returns synthetic success for qat_ tokens"""
+    def test_api_token_skips_login(self):
+        """Test that api_token users should not call login() - token is already on the session"""
         api = QuadsApi("", "", "http://example.com/", api_token="qat_abc123")
-        result = api.login()
-        assert result["status_code"] == 201
-        assert result["status"] == "success"
-        assert result["auth_token"] == "qat_abc123"
-
-    def test_login_noop_does_not_make_request(self):
-        """Test that login() with qat_ token makes no HTTP request"""
-        api = QuadsApi("", "", "http://example.com/", api_token="qat_abc123")
-        api.session.post = Mock(side_effect=AssertionError("should not be called"))
-        result = api.login()
-        assert result["status"] == "success"
+        assert api.token == "qat_abc123"
+        assert api.session.headers.get("Authorization") == "Bearer qat_abc123"
 
     @patch("requests.Session.request")
     def test_get_user(self, mock_request):
