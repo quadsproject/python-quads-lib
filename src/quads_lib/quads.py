@@ -22,6 +22,13 @@ class QuadsApi(QuadsBase):
         return json_response
 
     def login(self) -> dict:
+        if self.token and self.token.startswith("qat_"):
+            return {
+                "status_code": 201,
+                "status": "success",
+                "message": "Authenticated via API token",
+                "auth_token": self.token,
+            }
         endpoint = urljoin(self.base_url, "login")
         _response = self.session.post(endpoint, auth=self.auth, verify=self.verify)
         json_response = _response.json()
@@ -29,6 +36,9 @@ class QuadsApi(QuadsBase):
             self.token = json_response.get("auth_token")
             self.session.headers.update({"Authorization": f"Bearer {self.token}"})
         return json_response
+
+    def get_current_user(self) -> dict:
+        return self.get("me")
 
     def logout(self) -> dict:
         json_response = self._make_request("POST", "logout")
