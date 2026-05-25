@@ -12,7 +12,7 @@
 %define name quads-lib
 %define reponame python-quads-lib
 %define branch development
-%define version 0.1.13
+%define version 0.1.14
 %define build_timestamp %{lua: print(os.date("%Y%m%d"))}
 
 Summary: Python client library for interacting with the QUADS API
