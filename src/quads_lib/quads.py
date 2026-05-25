@@ -37,8 +37,8 @@ class QuadsApi(QuadsBase):
             self.session.headers.update({"Authorization": f"Bearer {self.token}"})
         return json_response
 
-    def get_current_user(self) -> dict:
-        return self.get("me")
+    def get_user(self, email: str) -> dict:
+        return self.get(f"users/{email}")
 
     def logout(self) -> dict:
         json_response = self._make_request("POST", "logout")
