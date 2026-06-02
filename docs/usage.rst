@@ -36,3 +36,18 @@ You can control certificate verification using the ``verify`` parameter:
 
     # Use a custom CA bundle file
     quads = QuadsApi(username, password, base_url, verify="/path/to/ca-bundle.pem")
+
+Tracking Move Progress
+----------------------
+
+Query the 12-stage provisioning pipeline for active host moves:
+
+.. code-block:: python
+
+    with QuadsApi(username, password, base_url) as quads:
+        # All active moves, optionally filtered by cloud or status
+        moves = quads.get_all_move_progress(cloud="cloud02")
+
+        # Single host progress
+        progress = quads.get_move_progress("host01.example.com")
+        print(f"{progress['host']}: {progress['status']}")

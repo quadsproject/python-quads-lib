@@ -372,23 +372,57 @@ class QuadsApi(QuadsBase):
         return json_response
 
     # Move Progress
-    def get_all_move_progress(self, cloud: Optional[str] = None) -> dict:
-        url = "moves/progress"
+    def get_all_move_progress(
+        self, cloud: Optional[str] = None, status: Optional[str] = None
+    ) -> dict:
+        """Retrieve all active move progress records.
+
+        Args:
+            cloud: Filter by target cloud name.
+            status: Filter by progress status (e.g. provisioning, failed).
+        """
+        url = "moves/progress/"
+        params = {}
         if cloud:
-            url = f"{url}?{urlencode({'cloud': cloud})}"
+            params["cloud"] = cloud
+        if status:
+            params["status"] = status
+        if params:
+            url = f"{url}?{urlencode(params)}"
         return self.get(url)
 
     def get_move_progress(self, hostname: str) -> dict:
+        """Retrieve move progress for a specific host.
+
+        Args:
+            hostname: The host to query progress for.
+        """
         endpoint = Path("moves") / "progress" / hostname
         return self.get(str(endpoint))
 
     def create_move_progress(self, data: dict) -> dict:
-        return self.post("moves/progress", data)
+        """Create a move progress record. Requires admin auth.
+
+        Args:
+            data: Dict with hostname, source_cloud, target_cloud, and optional schedule_id.
+        """
+        return self.post("moves/progress/", data)
 
     def create_move_progress_batch(self, records: list) -> dict:
+        """Batch-create move progress records. Requires admin auth.
+
+        Args:
+            records: List of dicts, each with hostname, source_cloud, target_cloud.
+        """
         return self.post("moves/progress/batch", {"records": records})
 
     def update_move_progress(self, progress_id: int, data: dict) -> dict:
+        """Update a move progress record. Requires admin auth.
+
+        Args:
+            progress_id: The progress record ID to update.
+            data: Dict with any of status, message, error_message.
+        """
         endpoint = Path("moves") / "progress" / str(progress_id)
         return self.patch(str(endpoint), data)
 
