@@ -214,7 +214,9 @@ class QuadsApi(QuadsBase):
     def create_assignment(self, data: dict) -> dict:
         response = self.post("assignments", data)
         if response and {"id", "cloud"} <= response.keys():
-            print(f"Assignment created - ID: {response['id']}, Cloud: {response['cloud']['name']}")
+            print(
+                f"Assignment created - ID: {response['id']}, Cloud: {response['cloud']['name']}"
+            )
         return response
 
     @returns("Assignment")
@@ -222,7 +224,9 @@ class QuadsApi(QuadsBase):
         endpoint = Path("assignments") / "self"
         response = self.post(str(endpoint), data)
         if response and {"id", "cloud"} <= response.keys():
-            print(f"Self-assignment created - ID: {response['id']}, Cloud: {response['cloud']['name']}")
+            print(
+                f"Self-assignment created - ID: {response['id']}, Cloud: {response['cloud']['name']}"
+            )
         return response
 
     @returns("Assignment")
@@ -366,6 +370,27 @@ class QuadsApi(QuadsBase):
             url = f"moves?{url_params}"
         json_response = self.get(url)
         return json_response
+
+    # Move Progress
+    def get_all_move_progress(self, cloud: Optional[str] = None) -> dict:
+        url = "moves/progress"
+        if cloud:
+            url = f"{url}?{urlencode({'cloud': cloud})}"
+        return self.get(url)
+
+    def get_move_progress(self, hostname: str) -> dict:
+        endpoint = Path("moves") / "progress" / hostname
+        return self.get(str(endpoint))
+
+    def create_move_progress(self, data: dict) -> dict:
+        return self.post("moves/progress", data)
+
+    def create_move_progress_batch(self, records: list) -> dict:
+        return self.post("moves/progress/batch", {"records": records})
+
+    def update_move_progress(self, progress_id: int, data: dict) -> dict:
+        endpoint = Path("moves") / "progress" / str(progress_id)
+        return self.patch(str(endpoint), data)
 
     def get_version(self) -> dict:
         json_response = self.get("version")
