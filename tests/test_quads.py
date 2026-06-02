@@ -1805,7 +1805,7 @@ class TestQuadsApi:
         result = self.api.get_all_move_progress()
 
         mock_get.assert_called_once()
-        assert str(mock_get.call_args[0][1]).endswith("/moves/progress")
+        assert str(mock_get.call_args[0][1]).endswith("/moves/progress/")
         assert result == expected_response
 
     @patch("requests.Session.request")
@@ -1819,6 +1819,19 @@ class TestQuadsApi:
 
         mock_get.assert_called_once()
         assert "cloud=cloud02" in str(mock_get.call_args[0][1])
+        assert result == expected_response
+
+    @patch("requests.Session.request")
+    def test_get_all_move_progress_with_status(self, mock_get):
+        expected_response = [{"id": 1, "host": "host1", "status": "provisioning"}]
+        mock_response = Mock()
+        mock_response.json.return_value = expected_response
+        mock_get.return_value = mock_response
+
+        result = self.api.get_all_move_progress(status="provisioning")
+
+        mock_get.assert_called_once()
+        assert "status=provisioning" in str(mock_get.call_args[0][1])
         assert result == expected_response
 
     @patch("requests.Session.request")
@@ -1849,7 +1862,7 @@ class TestQuadsApi:
         result = self.api.create_move_progress(data)
 
         mock_post.assert_called_once()
-        assert str(mock_post.call_args[0][1]).endswith("/moves/progress")
+        assert str(mock_post.call_args[0][1]).endswith("/moves/progress/")
         assert result == expected_response
 
     @patch("requests.Session.request")
@@ -1867,6 +1880,7 @@ class TestQuadsApi:
 
         mock_post.assert_called_once()
         assert str(mock_post.call_args[0][1]).endswith("/moves/progress/batch")
+        assert mock_post.call_args[1]["json"] == {"records": records}
         assert result == expected_response
 
     @patch("requests.Session.request")
