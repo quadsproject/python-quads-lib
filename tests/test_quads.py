@@ -1763,7 +1763,7 @@ class TestQuadsApi:
         assert str(mock_get.call_args[0][1]).endswith(f"/moves?date={date}")
         assert result == expected_response
 
-    # Move Progress
+    # Move Status
     @patch("requests.Session.request")
     def test_get_all_move_status(self, mock_get):
         expected_response = [
