@@ -1765,7 +1765,7 @@ class TestQuadsApi:
 
     # Move Progress
     @patch("requests.Session.request")
-    def test_get_all_move_progress(self, mock_get):
+    def test_get_all_move_status(self, mock_get):
         expected_response = [
             {"id": 1, "host": "host1", "status": "pending"},
             {"id": 2, "host": "host2", "status": "ipmi_config"},
@@ -1774,109 +1774,88 @@ class TestQuadsApi:
         mock_response.json.return_value = expected_response
         mock_get.return_value = mock_response
 
-        result = self.api.get_all_move_progress()
+        result = self.api.get_all_move_status()
 
         mock_get.assert_called_once()
         assert str(mock_get.call_args[0][1]).endswith("/moves/progress/")
         assert result == expected_response
 
     @patch("requests.Session.request")
-    def test_get_all_move_progress_with_cloud(self, mock_get):
+    def test_get_all_move_status_with_cloud(self, mock_get):
         expected_response = [{"id": 1, "host": "host1", "status": "pending"}]
         mock_response = Mock()
         mock_response.json.return_value = expected_response
         mock_get.return_value = mock_response
 
-        result = self.api.get_all_move_progress(cloud="cloud02")
+        result = self.api.get_all_move_status(cloud="cloud02")
 
         mock_get.assert_called_once()
         assert "cloud=cloud02" in str(mock_get.call_args[0][1])
         assert result == expected_response
 
     @patch("requests.Session.request")
-    def test_get_all_move_progress_with_status(self, mock_get):
+    def test_get_all_move_status_with_status(self, mock_get):
         expected_response = [{"id": 1, "host": "host1", "status": "provisioning"}]
         mock_response = Mock()
         mock_response.json.return_value = expected_response
         mock_get.return_value = mock_response
 
-        result = self.api.get_all_move_progress(status="provisioning")
+        result = self.api.get_all_move_status(status="provisioning")
 
         mock_get.assert_called_once()
         assert "status=provisioning" in str(mock_get.call_args[0][1])
         assert result == expected_response
 
     @patch("requests.Session.request")
-    def test_get_move_progress(self, mock_get):
+    def test_get_move_status(self, mock_get):
         expected_response = {"id": 1, "host": "host1", "status": "provisioning"}
         mock_response = Mock()
         mock_response.json.return_value = expected_response
         mock_get.return_value = mock_response
 
-        result = self.api.get_move_progress("host1")
+        result = self.api.get_move_status("host1")
 
         mock_get.assert_called_once()
         assert str(mock_get.call_args[0][1]).endswith("/moves/progress/host1")
         assert result == expected_response
 
     @patch("requests.Session.request")
-    def test_create_move_progress(self, mock_post):
-        data = {
-            "hostname": "host1",
-            "source_cloud": "cloud01",
-            "target_cloud": "cloud02",
-        }
-        expected_response = {"id": 1, "host": "host1", "status": "pending"}
-        mock_response = Mock()
-        mock_response.json.return_value = expected_response
-        mock_post.return_value = mock_response
-
-        result = self.api.create_move_progress(data)
-
-        mock_post.assert_called_once()
-        assert str(mock_post.call_args[0][1]).endswith("/moves/progress/")
-        assert result == expected_response
-
-    @patch("requests.Session.request")
-    def test_create_move_progress_batch(self, mock_post):
-        records = [
-            {"hostname": "host1", "source_cloud": "cloud01", "target_cloud": "cloud02"},
-            {"hostname": "host2", "source_cloud": "cloud01", "target_cloud": "cloud03"},
-        ]
+    def test_start_move_batch(self, mock_post):
+        hostnames = ["host1", "host2"]
         expected_response = {"host1": 1, "host2": 2}
         mock_response = Mock()
         mock_response.json.return_value = expected_response
         mock_post.return_value = mock_response
 
-        result = self.api.create_move_progress_batch(records)
+        result = self.api.start_move_batch(hostnames)
 
         mock_post.assert_called_once()
         assert str(mock_post.call_args[0][1]).endswith("/moves/progress/batch")
-        assert mock_post.call_args[1]["json"] == {"records": records}
+        assert mock_post.call_args[1]["json"] == {"hostnames": hostnames}
         assert result == expected_response
 
     @patch("requests.Session.request")
-    def test_update_move_progress(self, mock_patch):
+    def test_update_move_status(self, mock_patch):
         data = {"status": "ipmi_config", "message": "IPMI configured"}
         expected_response = {"id": 1, "host": "host1", "status": "ipmi_config"}
         mock_response = Mock()
         mock_response.json.return_value = expected_response
         mock_patch.return_value = mock_response
 
-        result = self.api.update_move_progress(1, data)
+        result = self.api.update_move_status(1, data)
 
         mock_patch.assert_called_once()
         assert str(mock_patch.call_args[0][1]).endswith("/moves/progress/1")
         assert result == expected_response
 
     @patch("requests.Session.request")
-    def test_get_move_progress_error(self, mock_get):
+    def test_get_move_status_error(self, mock_get):
         mock_response = Mock()
         mock_response.status_code = 500
         mock_get.return_value = mock_response
 
         with pytest.raises(APIServerException, match="Check the flask server logs"):
-            self.api.get_move_progress("host1")
+            self.api.get_move_status("host1")
 
     @patch("requests.Session.request")
     def test_get_version(self, mock_get):

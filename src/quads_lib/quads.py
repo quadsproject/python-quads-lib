@@ -368,12 +368,12 @@ class QuadsApi(QuadsBase):
         return json_response
 
     # Move Progress
-    def get_all_move_progress(self, cloud: Optional[str] = None, status: Optional[str] = None) -> dict:
-        """Retrieve all active move progress records.
+    def get_all_move_status(self, cloud: Optional[str] = None, status: Optional[str] = None) -> dict:
+        """Retrieve all active move status records.
 
         Args:
             cloud: Filter by target cloud name.
-            status: Filter by progress status (e.g. provisioning, failed).
+            status: Filter by move status (e.g. provisioning, failed).
         """
         url = "moves/progress/"
         params = {}
@@ -385,39 +385,31 @@ class QuadsApi(QuadsBase):
             url = f"{url}?{urlencode(params)}"
         return self.get(url)
 
-    def get_move_progress(self, hostname: str) -> dict:
-        """Retrieve move progress for a specific host.
+    def get_move_status(self, hostname: str) -> dict:
+        """Retrieve move status for a specific host.
 
         Args:
-            hostname: The host to query progress for.
+            hostname: The host to query status for.
         """
         endpoint = Path("moves") / "progress" / hostname
         return self.get(str(endpoint))
 
-    def create_move_progress(self, data: dict) -> dict:
-        """Create a move progress record. Requires admin auth.
+    def start_move_batch(self, hostnames: list) -> dict:
+        """Start move tracking for a batch of hosts. Requires admin auth.
 
         Args:
-            data: Dict with hostname, source_cloud, target_cloud, and optional schedule_id.
+            hostnames: List of hostnames to start tracking.
         """
-        return self.post("moves/progress/", data)
+        return self.post("moves/progress/batch", {"hostnames": hostnames})
 
-    def create_move_progress_batch(self, records: list) -> dict:
-        """Batch-create move progress records. Requires admin auth.
-
-        Args:
-            records: List of dicts, each with hostname, source_cloud, target_cloud.
-        """
-        return self.post("moves/progress/batch", {"records": records})
-
-    def update_move_progress(self, progress_id: int, data: dict) -> dict:
-        """Update a move progress record. Requires admin auth.
+    def update_move_status(self, schedule_id: int, data: dict) -> dict:
+        """Update move status on a schedule. Requires admin auth.
 
         Args:
-            progress_id: The progress record ID to update.
+            schedule_id: The schedule ID to update.
             data: Dict with any of status, message, error_message.
         """
-        endpoint = Path("moves") / "progress" / str(progress_id)
+        endpoint = Path("moves") / "progress" / str(schedule_id)
         return self.patch(str(endpoint), data)
 
     def get_version(self) -> dict:
