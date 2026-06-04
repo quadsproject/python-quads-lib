@@ -367,7 +367,7 @@ class QuadsApi(QuadsBase):
         json_response = self.get(url)
         return json_response
 
-    # Move Progress
+    # Move Status
     def get_all_move_status(self, cloud: Optional[str] = None, status: Optional[str] = None) -> dict:
         """Retrieve all active move status records.
 
