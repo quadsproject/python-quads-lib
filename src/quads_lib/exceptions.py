@@ -4,3 +4,7 @@ class APIServerException(Exception):
 
 class APIBadRequest(Exception):
     pass
+
+
+class APINotFound(Exception):
+    pass

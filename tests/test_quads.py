@@ -7,6 +7,7 @@ import pytest
 
 from quads_lib.base import QuadsBase
 from quads_lib.exceptions import APIBadRequest
+from quads_lib.exceptions import APINotFound
 from quads_lib.exceptions import APIServerException
 from quads_lib.quads import QuadsApi
 
@@ -1856,6 +1857,26 @@ class TestQuadsApi:
 
         with pytest.raises(APIServerException, match="Check the flask server logs"):
             self.api.get_move_status("host1")
+
+    @patch("requests.Session.request")
+    def test_get_move_status_not_found(self, mock_get):
+        mock_response = Mock()
+        mock_response.status_code = 404
+        mock_response.json.return_value = {"message": "Resource not found"}
+        mock_get.return_value = mock_response
+
+        with pytest.raises(APINotFound, match="Resource not found"):
+            self.api.get_move_status("host1")
+
+    @patch("requests.Session.request")
+    def test_get_all_move_status_not_found(self, mock_get):
+        mock_response = Mock()
+        mock_response.status_code = 404
+        mock_response.json.side_effect = JSONDecodeError("", "", 0)
+        mock_get.return_value = mock_response
+
+        with pytest.raises(APINotFound, match="Resource not found"):
+            self.api.get_all_move_status()
 
     @patch("requests.Session.request")
     def test_get_version(self, mock_get):

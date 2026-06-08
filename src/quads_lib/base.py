@@ -9,6 +9,7 @@ from requests.adapters import Retry
 from requests.auth import HTTPBasicAuth
 
 from quads_lib.exceptions import APIBadRequest
+from quads_lib.exceptions import APINotFound
 from quads_lib.exceptions import APIServerException
 
 
@@ -75,6 +76,12 @@ class QuadsBase:
         )
         if _response.status_code == 500:
             raise APIServerException("Check the flask server logs")
+        if _response.status_code == 404:
+            try:
+                response_json = _response.json()
+            except JSONDecodeError as e:
+                raise APINotFound("Resource not found") from e
+            raise APINotFound(response_json.get("message", "Resource not found"))
         if _response.status_code == 400:
             try:
                 response_json = _response.json()
