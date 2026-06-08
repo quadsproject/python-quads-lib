@@ -367,6 +367,51 @@ class QuadsApi(QuadsBase):
         json_response = self.get(url)
         return json_response
 
+    # Move Status
+    def get_all_move_status(self, cloud: Optional[str] = None, status: Optional[str] = None) -> dict:
+        """Retrieve all active move status records.
+
+        Args:
+            cloud: Filter by target cloud name.
+            status: Filter by move status (e.g. provisioning, failed).
+        """
+        url = "moves/progress/"
+        params = {}
+        if cloud:
+            params["cloud"] = cloud
+        if status:
+            params["status"] = status
+        if params:
+            url = f"{url}?{urlencode(params)}"
+        return self.get(url)
+
+    def get_move_status(self, hostname: str) -> dict:
+        """Retrieve move status for a specific host.
+
+        Args:
+            hostname: The host to query status for.
+        """
+        endpoint = Path("moves") / "progress" / hostname
+        return self.get(str(endpoint))
+
+    def start_move_batch(self, hostnames: list) -> dict:
+        """Start move tracking for a batch of hosts. Requires admin auth.
+
+        Args:
+            hostnames: List of hostnames to start tracking.
+        """
+        return self.post("moves/progress/batch", {"hostnames": hostnames})
+
+    def update_move_status(self, schedule_id: int, data: dict) -> dict:
+        """Update move status on a schedule. Requires admin auth.
+
+        Args:
+            schedule_id: The schedule ID to update.
+            data: Dict with any of status, message, error_message.
+        """
+        endpoint = Path("moves") / "progress" / str(schedule_id)
+        return self.patch(str(endpoint), data)
+
     def get_version(self) -> dict:
         json_response = self.get("version")
         return json_response
