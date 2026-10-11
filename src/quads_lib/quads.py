@@ -106,6 +106,26 @@ class QuadsApi(QuadsBase):
 
     @returns("List[Cloud]")
     def get_free_clouds(self) -> dict:
+        """Retrieve clouds with no active assignment, excluding the spare pool.
+
+        Canonical free-cloud detection, delegating to the server's
+        ``GET /clouds/free/`` (available since quads-lib 0.1.0). A cloud is
+        free when it has no assignment with ``active`` set, which also
+        excludes clouds with future schedules (their assignments are active),
+        and when it is not the spare pool (excluded server-side via the
+        server's ``spare_pool_name`` config, not a client-side name).
+
+        Returns:
+            The raw server response: a JSON list of cloud dicts, each with
+            ``id``, ``name`` and ``last_redefined`` (RFC 1123 GMT string,
+            e.g. ``Tue, 19 May 2026 12:00:00 GMT``). Use ``last_redefined``
+            plus the server's ``cloud_reservation_lock`` hours to display a
+            reservation-lock hint. An empty result is ``[]``.
+
+        Raises:
+            APINotFound: If the server has no such endpoint (QUADS servers
+                older than 2.1 do not expose ``/clouds/free/``).
+        """
         json_response = self.get("clouds/free/")
         return json_response
 
