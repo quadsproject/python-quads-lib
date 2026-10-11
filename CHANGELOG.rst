@@ -2,6 +2,14 @@
 Changelog
 =========
 
+0.1.18 (2026-10-11)
+-------------------
+
+* Document ``get_free_clouds`` as the canonical free-cloud API (server-side
+  semantics: no active assignment, future-scheduled clouds excluded, spare
+  pool excluded via server config) and pin its response contract, including
+  the ``last_redefined`` reservation-lock field, in tests.
+
 0.1.17 (2026-06-08)
 -------------------
 

@@ -639,12 +639,10 @@ class TestQuadsApi:
 
     @patch("requests.Session.request")
     def test_get_free_clouds(self, mock_get):
-        expected_response = {
-            "clouds": [
-                {"name": "cloud1", "owner": "user1", "status": "free"},
-                {"name": "cloud2", "owner": "user2", "status": "free"},
-            ]
-        }
+        expected_response = [
+            {"id": 2, "name": "cloud02", "last_redefined": "Wed, 07 Oct 2026 11:36:53 GMT"},
+            {"id": 3, "name": "cloud03", "last_redefined": "Wed, 07 Oct 2026 09:12:01 GMT"},
+        ]
         mock_response = Mock()
         mock_response.json.return_value = expected_response
         mock_get.return_value = mock_response
@@ -654,10 +652,14 @@ class TestQuadsApi:
         mock_get.assert_called_once()
         assert str(mock_get.call_args[0][1]).endswith("/clouds/free/")
         assert result == expected_response
+        # Contract: server response passes through unchanged, including the
+        # reservation-lock fields the server guarantees on every cloud dict.
+        assert [cloud["name"] for cloud in result] == ["cloud02", "cloud03"]
+        assert all(cloud["last_redefined"] for cloud in result)
 
     @patch("requests.Session.request")
     def test_get_free_clouds_empty(self, mock_get):
-        expected_response = {"clouds": []}
+        expected_response = []
         mock_response = Mock()
         mock_response.json.return_value = expected_response
         mock_get.return_value = mock_response
@@ -685,6 +687,16 @@ class TestQuadsApi:
         mock_get.return_value = mock_response
 
         with pytest.raises(APIBadRequest, match="Invalid request"):
+            self.api.get_free_clouds()
+
+    @patch("requests.Session.request")
+    def test_get_free_clouds_not_found(self, mock_get):
+        mock_response = Mock()
+        mock_response.status_code = 404
+        mock_response.json.side_effect = JSONDecodeError("", "", 0)
+        mock_get.return_value = mock_response
+
+        with pytest.raises(APINotFound, match="Resource not found"):
             self.api.get_free_clouds()
 
     @patch("requests.Session.request")
