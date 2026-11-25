@@ -7,6 +7,7 @@ import pytest
 
 from quads_lib.base import QuadsBase
 from quads_lib.exceptions import APIBadRequest
+from quads_lib.exceptions import APIForbidden
 from quads_lib.exceptions import APINotFound
 from quads_lib.exceptions import APIServerException
 from quads_lib.quads import QuadsApi
@@ -19,6 +20,26 @@ class TestQuadsApi:
         self.password = "testpassword"
         self.base_url = "http://example.com/"
         self.api = QuadsApi(self.username, self.password, self.base_url)
+
+    @patch("requests.Session.request")
+    def test_get_hosts_forbidden(self, mock_get):
+        mock_response = Mock()
+        mock_response.status_code = 403
+        mock_response.json.return_value = {"message": "You don't have permission"}
+        mock_get.return_value = mock_response
+
+        with pytest.raises(APIForbidden, match="You don't have permission"):
+            self.api.get_hosts()
+
+    @patch("requests.Session.request")
+    def test_get_hosts_forbidden_no_json(self, mock_get):
+        mock_response = Mock()
+        mock_response.status_code = 403
+        mock_response.json.side_effect = JSONDecodeError("Invalid JSON", "", 0)
+        mock_get.return_value = mock_response
+
+        with pytest.raises(APIForbidden, match="Failed to parse response"):
+            self.api.get_hosts()
 
     @patch("requests.Session.request")
     def test_get_hosts(self, mock_get):
@@ -640,8 +661,16 @@ class TestQuadsApi:
     @patch("requests.Session.request")
     def test_get_free_clouds(self, mock_get):
         expected_response = [
-            {"id": 2, "name": "cloud02", "last_redefined": "Wed, 07 Oct 2026 11:36:53 GMT"},
-            {"id": 3, "name": "cloud03", "last_redefined": "Wed, 07 Oct 2026 09:12:01 GMT"},
+            {
+                "id": 2,
+                "name": "cloud02",
+                "last_redefined": "Wed, 07 Oct 2026 11:36:53 GMT",
+            },
+            {
+                "id": 3,
+                "name": "cloud03",
+                "last_redefined": "Wed, 07 Oct 2026 09:12:01 GMT",
+            },
         ]
         mock_response = Mock()
         mock_response.json.return_value = expected_response
@@ -2119,10 +2148,10 @@ class TestQuadsApi:
         mock_response.json.return_value = error_response
         mock_request.return_value = mock_response
 
-        result = self.api.create_assignment(assignment_data)
+        with pytest.raises(APIForbidden, match="Self scheduling limit reached"):
+            self.api.create_assignment(assignment_data)
 
         mock_print.assert_not_called()
-        assert result == error_response
 
     @patch("builtins.print")
     @patch("requests.Session.request")
@@ -2188,10 +2217,10 @@ class TestQuadsApi:
         mock_response.json.return_value = error_response
         mock_request.return_value = mock_response
 
-        result = self.api.create_self_assignment(assignment_data)
+        with pytest.raises(APIForbidden, match="Self scheduling limit reached"):
+            self.api.create_self_assignment(assignment_data)
 
         mock_print.assert_not_called()
-        assert result == error_response
 
 
 class TestApiTokenAuth:

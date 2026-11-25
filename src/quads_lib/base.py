@@ -9,6 +9,7 @@ from requests.adapters import Retry
 from requests.auth import HTTPBasicAuth
 
 from quads_lib.exceptions import APIBadRequest
+from quads_lib.exceptions import APIForbidden
 from quads_lib.exceptions import APINotFound
 from quads_lib.exceptions import APIServerException
 
@@ -88,6 +89,12 @@ class QuadsBase:
             except JSONDecodeError as e:
                 raise APIBadRequest("Failed to parse response") from e
             raise APIBadRequest(response_json.get("message"))
+        if _response.status_code == 403:
+            try:
+                response_json = _response.json()
+            except JSONDecodeError as e:
+                raise APIForbidden("Failed to parse response") from e
+            raise APIForbidden(response_json.get("message", "Forbidden"))
         return _response.json()
 
     # Base functions
