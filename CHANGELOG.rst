@@ -2,6 +2,15 @@
 Changelog
 =========
 
+
+0.1.19 (2026-11-25)
+-------------------
+
+* Raise ``APIForbidden`` on 403 responses in ``_make_request`` instead of
+  returning the JSON body as a dict, matching the 400/404/500 behavior.
+  Callers iterating a 403 body no longer crash with
+  ``'str' object has no attribute 'get'``.
+
 0.1.18 (2026-10-11)
 -------------------
 
