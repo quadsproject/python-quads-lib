@@ -3,6 +3,16 @@ Changelog
 =========
 
 
+0.1.20 (2026-11-27)
+-------------------
+
+* Raise ``APIUnauthorized`` on 401 responses in ``_make_request`` instead of
+  returning the JSON body as a dict, matching the 400/403/404/500 behavior.
+  ``register()`` posts directly like ``login()`` so its 401 validation
+  responses (e.g. "User already exists") stay dicts, and ``__exit__`` no
+  longer raises when ``logout()`` gets a 401 from an expired token.
+
+
 0.1.19 (2026-11-25)
 -------------------
 
