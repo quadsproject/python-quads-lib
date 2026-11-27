@@ -12,6 +12,7 @@ from quads_lib.exceptions import APIBadRequest
 from quads_lib.exceptions import APIForbidden
 from quads_lib.exceptions import APINotFound
 from quads_lib.exceptions import APIServerException
+from quads_lib.exceptions import APIUnauthorized
 
 
 class QuadsBase:
@@ -64,7 +65,11 @@ class QuadsBase:
         return self
 
     def __exit__(self, exc_type, exc_value, traceback):
-        self.logout()
+        try:
+            self.logout()
+        except Exception:  # noqa: S110
+            # logout can 401 once the bearer token expired; still close
+            pass
         self.session.close()
 
     def _make_request(self, method: str, endpoint: str, data: Optional[dict] = None) -> dict:
@@ -95,6 +100,12 @@ class QuadsBase:
             except JSONDecodeError as e:
                 raise APIForbidden("Failed to parse response") from e
             raise APIForbidden(response_json.get("message", "Forbidden"))
+        if _response.status_code == 401:
+            try:
+                response_json = _response.json()
+            except JSONDecodeError as e:
+                raise APIUnauthorized("Failed to parse response") from e
+            raise APIUnauthorized(response_json.get("message", "Unauthorized"))
         return _response.json()
 
     # Base functions
