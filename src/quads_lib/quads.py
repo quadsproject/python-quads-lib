@@ -14,12 +14,15 @@ class QuadsApi(QuadsBase):
 
     # Auth
     def register(self) -> dict:
-        json_response = self._make_request(
-            "POST",
-            "register",
-            {"email": self.username, "password": self.password},
+        endpoint = urljoin(self.base_url, "register")
+        # register posts directly like login(): its 401 responses are
+        # validation outcomes (e.g. "User already exists"), not auth failures.
+        _response = self.session.post(
+            endpoint,
+            json={"email": self.username, "password": self.password},
+            verify=self.verify,
         )
-        return json_response
+        return _response.json()
 
     def login(self) -> dict:
         endpoint = urljoin(self.base_url, "login")

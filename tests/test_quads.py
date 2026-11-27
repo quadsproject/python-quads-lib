@@ -10,6 +10,7 @@ from quads_lib.exceptions import APIBadRequest
 from quads_lib.exceptions import APIForbidden
 from quads_lib.exceptions import APINotFound
 from quads_lib.exceptions import APIServerException
+from quads_lib.exceptions import APIUnauthorized
 from quads_lib.quads import QuadsApi
 
 
@@ -39,6 +40,26 @@ class TestQuadsApi:
         mock_get.return_value = mock_response
 
         with pytest.raises(APIForbidden, match="Failed to parse response"):
+            self.api.get_hosts()
+
+    @patch("requests.Session.request")
+    def test_get_hosts_unauthorized(self, mock_get):
+        mock_response = Mock()
+        mock_response.status_code = 401
+        mock_response.json.return_value = {"message": "Invalid Authentication token!"}
+        mock_get.return_value = mock_response
+
+        with pytest.raises(APIUnauthorized, match="Invalid Authentication token!"):
+            self.api.get_hosts()
+
+    @patch("requests.Session.request")
+    def test_get_hosts_unauthorized_no_json(self, mock_get):
+        mock_response = Mock()
+        mock_response.status_code = 401
+        mock_response.json.side_effect = JSONDecodeError("Invalid JSON", "", 0)
+        mock_get.return_value = mock_response
+
+        with pytest.raises(APIUnauthorized, match="Failed to parse response"):
             self.api.get_hosts()
 
     @patch("requests.Session.request")
@@ -2002,7 +2023,7 @@ class TestQuadsApi:
             mock_post.assert_called_once_with(str(Path("assignments") / "self"), test_data)
             assert result == expected_response
 
-    @patch("requests.Session.request")
+    @patch("requests.Session.post")
     def test_register_success(self, mock_post):
         expected_response = {
             "status_code": 201,
@@ -2015,7 +2036,7 @@ class TestQuadsApi:
         response = self.api.register()
 
         mock_post.assert_called_once()
-        assert str(mock_post.call_args[0][1]).endswith("/register")
+        assert str(mock_post.call_args[0][0]).endswith("/register")
         assert response == expected_response
 
     @patch("requests.Session.request")
@@ -2298,6 +2319,13 @@ class TestQuadsBase:
         quads_base.__exit__(None, None, None)
 
         quads_base.logout.assert_called_once()
+        quads_base.session.close.assert_called_once()
+
+    def test_context_manager_exit_logout_raises(self, quads_base):
+        quads_base.logout = Mock(side_effect=Exception("401"))
+        quads_base.session = Mock()
+        quads_base.__exit__(None, None, None)
+
         quads_base.session.close.assert_called_once()
 
     @patch("requests.Session.request")
