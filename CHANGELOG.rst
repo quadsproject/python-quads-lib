@@ -3,6 +3,15 @@ Changelog
 =========
 
 
+0.1.21 (2026-11-28)
+-------------------
+
+* Release to provide a git tag that matches the source. Captures the
+  ``verify``/``api_token`` ``QuadsBase`` support and the 401/403/404 API
+  error handling that were published as 0.1.20 but absent from the stale
+  ``v0.1.20`` git tag. Tag-based consumers (e.g. the Arch AUR package) now
+  resolve the correct code.
+
 0.1.20 (2026-11-27)
 -------------------
 
