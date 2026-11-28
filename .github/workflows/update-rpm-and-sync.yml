@@ -50,7 +50,8 @@ jobs:
 
       - name: Sync back to development
         run: |
-          git checkout development
+          git fetch origin development --quiet
+          git checkout -B development origin/development
           # Merge the updated latest branch into development
           git merge origin/latest --no-edit
           git push origin development
